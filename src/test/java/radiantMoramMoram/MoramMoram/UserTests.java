@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import radiantMoramMoram.MoramMoram.application.user.UserService;
+import radiantMoramMoram.MoramMoram.domain.user.Password;
 import radiantMoramMoram.MoramMoram.domain.user.User;
 
 
@@ -14,8 +15,11 @@ public class UserTests {
 
     @Test
     public void join(){
-        System.out.println("run");
-        User user = new User("id00","pw","name");
+        String id = "whddms";
+        String pw = "djssl";
+        String name  = "이종은";
+        Password password = new Password(pw);
+        User user = new User(id,password,name);
         userService.join(user);
     }
 
