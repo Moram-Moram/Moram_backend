@@ -9,7 +9,8 @@ public enum ErrorCode {
 
     BAD_REQUEST(400, "Bad Request"),
     INVALID_TOKEN(401,"Invalid Token"),
-    USER_NOT_FOUND(404,"User Not Found");
+    USER_NOT_FOUND(404,"User Not Found"),
+    POST_NOT_FOUND(404, "Post Not Found");
 
     private final int status;
 
