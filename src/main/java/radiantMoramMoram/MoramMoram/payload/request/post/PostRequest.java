@@ -18,6 +18,8 @@ public class PostRequest {
 
     private String userId;
 
-    private MultipartFile image;
+    private MultipartFile[] image;
+
+    private String[] category;
 
 }
