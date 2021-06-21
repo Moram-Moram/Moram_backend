@@ -4,9 +4,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import radiantMoramMoram.MoramMoram.application.user.UserService;
-import radiantMoramMoram.MoramMoram.domain.user.Password;
 import radiantMoramMoram.MoramMoram.domain.user.User;
-import radiantMoramMoram.MoramMoram.domain.user.UserDTO;
+import radiantMoramMoram.MoramMoram.application.user.UserDTO;
+import radiantMoramMoram.MoramMoram.domain.user.UserBuilder;
 
 
 @SpringBootTest(properties = "classpath:/application.yml")
@@ -16,11 +16,15 @@ public class UserTests {
 
     @Test
     public void joinTest(){
-        String id = "whddms";
+        String id = "whddd111";
         String pw = "djssl";
         String name  = "이종은";
-        Password password = new Password(pw);
-        User user = new User(id,password,name);
+
+        User user = new UserBuilder()
+                .setId(id)
+                .setPassword(pw)
+                .setName(name)
+                .build();
         userService.join(user);
     }
 
@@ -31,7 +35,4 @@ public class UserTests {
         UserDTO user = new UserDTO(id,pw);
         userService.login(user);
     }
-
-
-
 }
