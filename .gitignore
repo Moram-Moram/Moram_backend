@@ -22,3 +22,5 @@ build/
 .gradle/
 
 .idea/
+
+src/test/test.iml
