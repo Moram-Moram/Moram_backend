@@ -5,12 +5,15 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
+import radiantMoramMoram.MoramMoram.domain.post.Post;
 
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostRequest {
+public class WritePostRequest {
+
+    private Post post;
 
     private String title;
 
