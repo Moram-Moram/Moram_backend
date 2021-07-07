@@ -10,14 +10,17 @@ import radiantMoramMoram.MoramMoram.domain.post.category.CategoryEnum;
 import radiantMoramMoram.MoramMoram.domain.post.Post;
 import radiantMoramMoram.MoramMoram.domain.post.image.Image;
 import radiantMoramMoram.MoramMoram.exception.PostNotFoundException;
-import radiantMoramMoram.MoramMoram.payload.request.post.PostRequest;
-import radiantMoramMoram.MoramMoram.payload.response.PostResponse;
+import radiantMoramMoram.MoramMoram.payload.request.post.LikePostRequest;
+import radiantMoramMoram.MoramMoram.payload.request.post.WritePostRequest;
+import radiantMoramMoram.MoramMoram.payload.response.GetPostResponse;
 import radiantMoramMoram.MoramMoram.repository.post.CategoryRepository;
 import radiantMoramMoram.MoramMoram.repository.post.ImageRepository;
 import radiantMoramMoram.MoramMoram.repository.post.PostRepository;
 
 import java.io.File;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -32,17 +35,17 @@ public class PostServiceImpl implements PostService {
 
     @SneakyThrows
     @Override
-    public void writePost(PostRequest postRequest) {
+    public void writePost(WritePostRequest writePostRequest) {
 
         Post post = postRepository.save(
                 Post.builder()
-                        .title(postRequest.getTitle())
-                        .content(postRequest.getContent())
-                        .userId(postRequest.getUserId())
+                        .title(writePostRequest.getTitle())
+                        .content(writePostRequest.getContent())
+                        .userId(writePostRequest.getUserId())
                         .build()
         );
 
-        for (MultipartFile image : postRequest.getImage()) {
+        for (MultipartFile image : writePostRequest.getImage()) {
 
             String fileName = UUID.randomUUID().toString();
 
@@ -50,7 +53,7 @@ public class PostServiceImpl implements PostService {
 
             imageRepository.save(
                     Image.builder()
-                            .postId(post.getId())
+                            .post(writePostRequest.getPost())
                             .fileName(fileName)
                             .build()
             );
@@ -59,10 +62,10 @@ public class PostServiceImpl implements PostService {
 
         }
 
-        for (String category : postRequest.getCategory()) {
+        for (String category : writePostRequest.getCategory()) {
             categoryRepository.save(
                     Category.builder()
-                            .postId(post.getId())
+                            .post(writePostRequest.getPost())
                             .category(CategoryEnum.valueOf(category))
                             .build()
             );
@@ -71,11 +74,40 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public GetPostResponse getPost(Integer postId) {
+
+        Post post = postRepository.findById(postId)
+                .orElseThrow(PostNotFoundException::new);
+
+        List<String> fileNames = imageRepository.findByPostOrderById(postId)
+                .stream().map(Image::getFileName)
+                .collect(Collectors.toList());
+
+        List<String> categoryNames = categoryRepository.findByPostIdOrderById(postId).stream()
+                .map(Category::getCategory)
+                .map(CategoryEnum::getName)
+                .collect(Collectors.toList());
+
+        return GetPostResponse.builder()
+                .title(post.getTitle())
+                .content(post.getContent())
+                .userId(post.getUserId())
+                .category(categoryNames)
+                .image(fileNames)
+                .build();
+    }
+
+    @Override
     public void deletePost(Integer postId) {
         postRepository.findById(postId)
                 .orElseThrow(PostNotFoundException::new);
 
         postRepository.deleteByPostId(postId);
+    }
+
+    @Override
+    public void likePost(LikePostRequest likePostRequest) {
+
     }
 
 }
