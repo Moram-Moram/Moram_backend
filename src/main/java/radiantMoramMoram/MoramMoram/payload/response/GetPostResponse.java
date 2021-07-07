@@ -6,11 +6,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostResponse {
+public class GetPostResponse {
 
     private Integer postId;
 
@@ -20,8 +22,8 @@ public class PostResponse {
 
     private String userId;
 
-    private MultipartFile[] image;
+    private List<String> image;
 
-    private String[] category;
+    private List<String> category;
 
 }
