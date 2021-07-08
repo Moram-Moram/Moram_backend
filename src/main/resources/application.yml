@@ -22,3 +22,7 @@ auth:
       access: ${JWT_HEADER:Authorization}
       refresh: ${JWT_REFRESH_HEADER:X-Refresh-Token}
     prefix: ${JWT_PREFIX:Bearer}
+
+post:
+  file:
+    path: ${IMAGE_PATH:/}
