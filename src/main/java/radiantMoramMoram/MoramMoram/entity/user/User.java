@@ -1,7 +1,7 @@
 package radiantMoramMoram.MoramMoram.entity.user;
 
-import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import radiantMoramMoram.MoramMoram.entity.role.Role;
 import radiantMoramMoram.MoramMoram.security.auth.Authority;
 import radiantMoramMoram.MoramMoram.security.auth.AuthorityAttributeConverter;
@@ -10,7 +10,6 @@ import javax.persistence.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 // 루트 엔티티 (애그리거트)
@@ -21,9 +20,10 @@ public class User {
     @Id
     private String id;
     private String password;
-    private String name;
+    private String nickname;
     private boolean whiteCheck;
-    @Enumerated(EnumType.ORDINAL)
+    @Setter
+    @Convert(converter = AuthorityAttributeConverter.class)
     private Authority role = Authority.ROLE_WATER_DROP;
 
     @OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true)
@@ -33,10 +33,10 @@ public class User {
 
     }
 
-    User(String id, String password, String name, boolean whiteCheck) {
+    User(String id, String password, String nickname, boolean whiteCheck) {
         this.id = id;
         this.password = password;
-        this.name = name;
+        this.nickname = nickname;
         this.whiteCheck = whiteCheck;
     }
 
