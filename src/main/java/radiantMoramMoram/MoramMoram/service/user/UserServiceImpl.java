@@ -25,12 +25,8 @@ public class UserServiceImpl implements UserService {
 
     private final JwtUtil jwtUtil;
 
-    public ResponseEntity<String> join(User user){
-        if(userRepository.findById(user.getId()).isPresent()) {
-            return new ResponseEntity<>("id overlap", HttpStatus.BAD_REQUEST);
-        }
-
+    public void join(User user){
         userRepository.save(user);
-        return new ResponseEntity<>("create user", HttpStatus.CREATED);
     }
+
 }
