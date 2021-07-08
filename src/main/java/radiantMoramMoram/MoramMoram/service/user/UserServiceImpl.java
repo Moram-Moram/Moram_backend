@@ -8,28 +8,29 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import radiantMoramMoram.MoramMoram.entity.user.User;
 import radiantMoramMoram.MoramMoram.entity.user.UserBuilder;
+import radiantMoramMoram.MoramMoram.payload.request.user.LoginRequest;
+import radiantMoramMoram.MoramMoram.payload.request.user.TokenInfoRequest;
 import radiantMoramMoram.MoramMoram.repository.UserRepository;
 import radiantMoramMoram.MoramMoram.security.token.JwtUtil;
+import radiantMoramMoram.MoramMoram.security.token.TokenDTO;
+import static radiantMoramMoram.MoramMoram.entity.user.User.pwEncrypt;
+
+import javax.persistence.Convert;
 
 @RequiredArgsConstructor
 @Log
 @Service // applicationService
 public class UserServiceImpl implements UserService {
-
     private final UserRepository userRepository;
+
+    private final JwtUtil jwtUtil;
 
     public ResponseEntity<String> join(User user){
         if(userRepository.findById(user.getId()).isPresent()) {
             return new ResponseEntity<>("id overlap", HttpStatus.BAD_REQUEST);
         }
-        User saveUser = new UserBuilder()
-                .setId(user.getId())
-                .setName(user.getName())
-                .setPassword(user.getPassword())
-                .setWhiteCheck(user.isWhiteCheck())
-                .build();
 
-        userRepository.save(saveUser);
+        userRepository.save(user);
         return new ResponseEntity<>("create user", HttpStatus.CREATED);
     }
 }
