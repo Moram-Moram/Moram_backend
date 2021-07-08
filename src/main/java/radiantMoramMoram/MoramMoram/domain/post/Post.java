@@ -24,4 +24,11 @@ public class Post {
 
     private String userId;
 
+    private boolean report;
+
+    public Post setReport(boolean report) {
+        this.report = report;
+        return this;
+    }
+
 }
