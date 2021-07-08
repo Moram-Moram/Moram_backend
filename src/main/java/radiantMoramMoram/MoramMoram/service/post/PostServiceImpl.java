@@ -9,12 +9,16 @@ import radiantMoramMoram.MoramMoram.domain.post.category.Category;
 import radiantMoramMoram.MoramMoram.domain.post.category.CategoryEnum;
 import radiantMoramMoram.MoramMoram.domain.post.Post;
 import radiantMoramMoram.MoramMoram.domain.post.image.Image;
+import radiantMoramMoram.MoramMoram.domain.post.like.LikePost;
+import radiantMoramMoram.MoramMoram.domain.user.User;
 import radiantMoramMoram.MoramMoram.exception.PostNotFoundException;
 import radiantMoramMoram.MoramMoram.payload.request.post.LikePostRequest;
+import radiantMoramMoram.MoramMoram.payload.request.post.ReportPostRequest;
 import radiantMoramMoram.MoramMoram.payload.request.post.WritePostRequest;
 import radiantMoramMoram.MoramMoram.payload.response.GetPostResponse;
 import radiantMoramMoram.MoramMoram.repository.post.CategoryRepository;
 import radiantMoramMoram.MoramMoram.repository.post.ImageRepository;
+import radiantMoramMoram.MoramMoram.repository.post.LikePostRepository;
 import radiantMoramMoram.MoramMoram.repository.post.PostRepository;
 
 import java.io.File;
@@ -29,6 +33,7 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final CategoryRepository categoryRepository;
     private final ImageRepository imageRepository;
+    private final LikePostRepository likePostRepository;
 
     @Value("${post.image.path}")
     private String imagePath;
@@ -108,6 +113,38 @@ public class PostServiceImpl implements PostService {
     @Override
     public void likePost(LikePostRequest likePostRequest) {
 
+        User user = likePostRequest.getUser();
+        Post post = likePostRequest.getPost();
+
+        boolean isLikePosted = likePostRepository.existsByPostAndUser(post, user);
+
+        if(isLikePosted) {
+            likePostRepository.deleteByPostAndUser(post, user);
+        } else {
+            likePostRepository.save(
+                    LikePost.builder()
+                            .post(post)
+                            .user(user)
+                            .build()
+            );
+        }
     }
+
+    @Override
+    public void reportPost(ReportPostRequest reportPostRequest) {
+
+        int postId = reportPostRequest.getPostId();
+
+        Post post = postRepository.findById(postId)
+                .orElseThrow(PostNotFoundException::new);
+
+        if(!post.isReport()) {
+            postRepository.save(
+                    post.setReport(true)
+            );
+        }
+
+    }
+
 
 }
