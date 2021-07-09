@@ -10,7 +10,7 @@ import radiantMoramMoram.MoramMoram.payload.request.user.SignUpRequest;
 import radiantMoramMoram.MoramMoram.payload.request.user.TokenInfoRequest;
 import radiantMoramMoram.MoramMoram.repository.UserRepository;
 import radiantMoramMoram.MoramMoram.security.token.JwtUtil;
-import radiantMoramMoram.MoramMoram.security.token.TokenDTO;
+import radiantMoramMoram.MoramMoram.payload.response.token.TokenResponse;
 
 import static radiantMoramMoram.MoramMoram.entity.user.User.pwEncrypt;
 
@@ -34,4 +34,18 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
+    public TokenResponse login(LoginRequest loginUser){
+        User user = userRepository.findByIdAndPassword(loginUser.getId(), pwEncrypt(loginUser.getPw()));
+
+        if(user==null){
+            return new TokenResponse(null,null);
+        }
+
+        TokenInfoRequest tokenInfoReq = TokenInfoRequest.builder()
+                .role(user.getRole())
+                .id(user.getId())
+                .build();
+
+        return jwtUtil.createToken(tokenInfoReq);
+    }
 }
