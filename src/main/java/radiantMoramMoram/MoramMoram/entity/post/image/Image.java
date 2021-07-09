@@ -1,27 +1,27 @@
-package radiantMoramMoram.MoramMoram.domain.post.category;
+package radiantMoramMoram.MoramMoram.entity.post.image;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import radiantMoramMoram.MoramMoram.domain.post.Post;
+import radiantMoramMoram.MoramMoram.entity.post.Post;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
-@Entity(name = "tbl_category")
+@Entity(name = "tbl_image")
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Category {
+public class Image {
 
     @Id
     @ManyToOne
     private Post post;
 
     @Id
-    private CategoryEnum category;
+    private String fileName;
 
 }

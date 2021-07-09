@@ -1,10 +1,10 @@
-package radiantMoramMoram.MoramMoram.domain.post.like;
+package radiantMoramMoram.MoramMoram.entity.post.like;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import radiantMoramMoram.MoramMoram.domain.post.Post;
+import radiantMoramMoram.MoramMoram.entity.post.Post;
 import radiantMoramMoram.MoramMoram.domain.user.User;
 
 import javax.persistence.Entity;

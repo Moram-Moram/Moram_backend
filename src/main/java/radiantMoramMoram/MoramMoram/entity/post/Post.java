@@ -1,4 +1,4 @@
-package radiantMoramMoram.MoramMoram.domain.post;
+package radiantMoramMoram.MoramMoram.entity.post;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

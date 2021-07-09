@@ -5,17 +5,20 @@ import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import radiantMoramMoram.MoramMoram.domain.post.category.Category;
-import radiantMoramMoram.MoramMoram.domain.post.category.CategoryEnum;
-import radiantMoramMoram.MoramMoram.domain.post.Post;
-import radiantMoramMoram.MoramMoram.domain.post.image.Image;
-import radiantMoramMoram.MoramMoram.domain.post.like.LikePost;
+import radiantMoramMoram.MoramMoram.entity.post.category.Category;
+import radiantMoramMoram.MoramMoram.entity.post.category.CategoryEnum;
+import radiantMoramMoram.MoramMoram.entity.post.Post;
+import radiantMoramMoram.MoramMoram.entity.post.image.Image;
+import radiantMoramMoram.MoramMoram.entity.post.like.LikePost;
 import radiantMoramMoram.MoramMoram.domain.user.User;
 import radiantMoramMoram.MoramMoram.exception.PostNotFoundException;
 import radiantMoramMoram.MoramMoram.payload.request.post.LikePostRequest;
 import radiantMoramMoram.MoramMoram.payload.request.post.ReportPostRequest;
 import radiantMoramMoram.MoramMoram.payload.request.post.WritePostRequest;
+<<<<<<< Updated upstream
 import radiantMoramMoram.MoramMoram.payload.response.GetPostResponse;
+=======
+>>>>>>> Stashed changes
 import radiantMoramMoram.MoramMoram.repository.post.CategoryRepository;
 import radiantMoramMoram.MoramMoram.repository.post.ImageRepository;
 import radiantMoramMoram.MoramMoram.repository.post.LikePostRepository;

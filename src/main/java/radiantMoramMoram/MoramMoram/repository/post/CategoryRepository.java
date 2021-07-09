@@ -1,8 +1,8 @@
 package radiantMoramMoram.MoramMoram.repository.post;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import radiantMoramMoram.MoramMoram.domain.post.category.Category;
-import radiantMoramMoram.MoramMoram.domain.post.category.CategoryKey;
+import radiantMoramMoram.MoramMoram.entity.post.category.Category;
+import radiantMoramMoram.MoramMoram.entity.post.category.CategoryKey;
 
 import java.util.List;
 
