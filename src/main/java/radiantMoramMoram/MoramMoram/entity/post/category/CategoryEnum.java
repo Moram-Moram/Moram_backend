@@ -1,4 +1,4 @@
-package radiantMoramMoram.MoramMoram.domain.post.category;
+package radiantMoramMoram.MoramMoram.entity.post.category;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
