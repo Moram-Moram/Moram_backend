@@ -1,10 +1,10 @@
-package radiantMoramMoram.MoramMoram.domain.post.category;
+package radiantMoramMoram.MoramMoram.entity.post.category;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import radiantMoramMoram.MoramMoram.domain.post.Post;
+import radiantMoramMoram.MoramMoram.entity.post.Post;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
