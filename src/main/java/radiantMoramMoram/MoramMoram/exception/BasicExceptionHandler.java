@@ -1,4 +1,4 @@
-package radiantMoramMoram.MoramMoram.error;
+package radiantMoramMoram.MoramMoram.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

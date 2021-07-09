@@ -5,6 +5,8 @@ import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 import radiantMoramMoram.MoramMoram.entity.user.User;
 import radiantMoramMoram.MoramMoram.entity.user.UserBuilder;
+import radiantMoramMoram.MoramMoram.exception.BasicException;
+import radiantMoramMoram.MoramMoram.exception.ErrorCode;
 import radiantMoramMoram.MoramMoram.payload.request.user.LoginRequest;
 import radiantMoramMoram.MoramMoram.payload.request.user.SignUpRequest;
 import radiantMoramMoram.MoramMoram.payload.request.user.TokenInfoRequest;
@@ -38,7 +40,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByIdAndPassword(loginUser.getId(), pwEncrypt(loginUser.getPw()));
 
         if(user==null){
-            return new TokenResponse(null,null);
+            throw new BasicException(ErrorCode.USER_NOT_FOUND);
         }
 
         TokenInfoRequest tokenInfoReq = TokenInfoRequest.builder()
