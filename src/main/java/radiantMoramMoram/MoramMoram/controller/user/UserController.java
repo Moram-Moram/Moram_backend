@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import radiantMoramMoram.MoramMoram.payload.request.user.LoginRequest;
+import radiantMoramMoram.MoramMoram.payload.request.user.SignUpRequest;
 import radiantMoramMoram.MoramMoram.security.token.TokenDTO;
 import radiantMoramMoram.MoramMoram.service.user.UserServiceImpl;
 import radiantMoramMoram.MoramMoram.entity.user.User;
@@ -21,7 +22,7 @@ public class UserController {
     private final JwtUtil jwtUtil;
 
     @PostMapping("/user")
-    public void join(@RequestBody User user){
+    public void join(@RequestBody SignUpRequest user){
         userService.join(user);
     }
 }

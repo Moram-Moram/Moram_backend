@@ -2,17 +2,12 @@ package radiantMoramMoram.MoramMoram.entity.user;
 
 import lombok.Getter;
 import lombok.Setter;
-import radiantMoramMoram.MoramMoram.entity.role.Role;
 import radiantMoramMoram.MoramMoram.security.auth.Authority;
 import radiantMoramMoram.MoramMoram.security.auth.AuthorityAttributeConverter;
 
 import javax.persistence.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.List;
-
-// 루트 엔티티 (애그리거트)
 @Getter
 @Table(name = "tbl_user")
 @Entity
@@ -21,13 +16,11 @@ public class User {
     private String id;
     private String password;
     private String nickname;
+    @Column(name = "white_check")
     private boolean whiteCheck;
     @Setter
     @Convert(converter = AuthorityAttributeConverter.class)
     private Authority role = Authority.ROLE_WATER_DROP;
-
-    @OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<Role> roles = new ArrayList<>();
 
     public User() {
 
