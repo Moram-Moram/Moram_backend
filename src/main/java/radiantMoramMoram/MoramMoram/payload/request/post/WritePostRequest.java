@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
-import radiantMoramMoram.MoramMoram.domain.post.Post;
+import radiantMoramMoram.MoramMoram.entity.post.Post;
 
 @Getter
 @Builder
