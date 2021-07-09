@@ -1,7 +1,6 @@
-package radiantMoramMoram.MoramMoram.domain.post.like;
+package radiantMoramMoram.MoramMoram.entity.post.like;
 
 import lombok.Builder;
-import org.springframework.boot.SpringApplicationExtensionsKt;
 
 import java.io.Serializable;
 
