@@ -14,7 +14,7 @@ spring:
 
 auth:
   jwt:
-    secret: ${JWT_SECRET_KEY:dGVzdA==}
+    secret: 45VCO4fzXw4O32IV0qF3hixZLWChc4WiB9li3mw-WPcnfe7c
     exp:
       access: ${JWT_ACCESS_EXP:3600}
       refresh: ${JWT_REFRESH_EXP:3600}
