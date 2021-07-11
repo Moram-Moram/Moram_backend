@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import radiantMoramMoram.MoramMoram.entity.post.Post;
-import radiantMoramMoram.MoramMoram.domain.user.User;
+import radiantMoramMoram.MoramMoram.entity.user.User;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
