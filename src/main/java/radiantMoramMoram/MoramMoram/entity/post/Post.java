@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import radiantMoramMoram.MoramMoram.entity.user.User;
 
 import javax.persistence.*;
 
@@ -22,8 +23,9 @@ public class Post {
 
     private String content;
 
-    @Column(name = "user_id")
-    private String userId;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     private boolean report = false;
 

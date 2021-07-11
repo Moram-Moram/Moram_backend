@@ -20,7 +20,7 @@ public class PostServiceImpl implements PostService {
                 Post.builder()
                         .title(writePostRequest.getTitle())
                         .content(writePostRequest.getContent())
-                        .userId(writePostRequest.getUserId())
+                        .user(writePostRequest.getUser())
                         .build()
         );
 
