@@ -83,4 +83,11 @@ public class JwtUtil {
         return false;
 
     }
+
+
+    public String getUserIdFromJwtToken(String accessToken){
+        Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(SECRET_KEY).requireAudience("user").build().parseClaimsJws(accessToken);
+
+        return (String) claims.getBody().get("user");
+    }
 }
