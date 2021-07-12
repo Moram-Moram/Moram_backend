@@ -18,9 +18,9 @@ import java.util.Optional;
 public class CustomUserDetailService implements UserDetailsService {
     private final UserRepository userRepository;
     @Override
-    public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        Optional<User> user = userRepository.findById(id);
+        Optional<User> user = userRepository.findById(username);
         ArrayList<GrantedAuthority> auth = new ArrayList<>();
         if(user.isPresent()){
             auth.add(new SimpleGrantedAuthority(user.get().getRole().toString()));
@@ -28,6 +28,15 @@ public class CustomUserDetailService implements UserDetailsService {
             throw new UsernameNotFoundException("User not found");
         }
 
-        return new org.springframework.security.core.userdetails.User(user.get().getId(),user.get().getPassword(),true, true, true, true, auth);
+        System.out.println(auth);
+        System.out.println(user.get().getRole().toString());
+
+        return org.springframework.security.core.userdetails.User
+                .builder()
+                .username(user.get().getId())
+                .password(user.get().getPassword())
+                .roles(user.get().getRole().toString())
+                .build();
+
     }
 }
