@@ -7,8 +7,8 @@ import java.io.Serializable;
 @Builder
 public class LikePostKey implements Serializable {
 
-    private int postId;
+    private int post;
 
-    private String userId;
+    private String user;
 
 }

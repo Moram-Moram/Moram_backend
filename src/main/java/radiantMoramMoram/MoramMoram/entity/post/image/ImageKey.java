@@ -7,7 +7,7 @@ import java.io.Serializable;
 @Builder
 public class ImageKey implements Serializable {
 
-    private int postId;
+    private int post;
 
-    private String imagePath;
+    private String fileName;
 }

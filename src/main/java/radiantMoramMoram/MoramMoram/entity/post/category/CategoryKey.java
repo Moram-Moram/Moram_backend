@@ -7,7 +7,7 @@ import java.io.Serializable;
 @Builder
 public class CategoryKey implements Serializable {
 
-    private int postId;
+    private int post;
 
     private Category category;
 
