@@ -22,17 +22,18 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        log.info("filter 진입");
+
         String accessToken = request.getHeader(AUTHORIZATION_HEADER);
 
         if (StringUtils.hasText(accessToken) && jwtUtil.validateToken(accessToken)){
             String userId = jwtUtil.getUserIdFromJwtToken(accessToken);
             UserDetails userDetails = jwtUtil.userAuthReturn(userId);
 
+            log.info("userDetails.getAuthorities(): "+userDetails.getAuthorities());
 
-            System.out.println(userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(userDetails,null, userDetails.getAuthorities()));
         }
+
         filterChain.doFilter(request, response);
     }
 }

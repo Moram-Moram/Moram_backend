@@ -1,6 +1,7 @@
 package radiantMoramMoram.MoramMoram.service.user;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,6 +14,7 @@ import radiantMoramMoram.MoramMoram.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.Optional;
 
+@Log
 @RequiredArgsConstructor
 @Service
 public class CustomUserDetailService implements UserDetailsService {
@@ -28,8 +30,7 @@ public class CustomUserDetailService implements UserDetailsService {
             throw new UsernameNotFoundException("User not found");
         }
 
-        System.out.println(auth);
-        System.out.println(user.get().getRole().toString());
+        log.info("UserDetailsService getRole: "+user.get().getRole().toString());
 
         return org.springframework.security.core.userdetails.User
                 .builder()
