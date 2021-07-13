@@ -21,7 +21,7 @@ import java.util.Date;
 @Log
 @Component
 public class JwtUtil {
-    public final static long TOKEN_VALIDATION_SECOND = 1000L*10;
+    public final static long TOKEN_VALIDATION_SECOND = 60*60*500;
     public final static long REFRESH_TOKEN_VALIDATION_SECOND  = 1000L*60*24*2;
 
     private final CustomUserDetailService userDetailsService;
@@ -87,7 +87,7 @@ public class JwtUtil {
 
 
     public String getUserIdFromJwtToken(String accessToken){
-        Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(SECRET_KEY).requireAudience("user").build().parseClaimsJws(accessToken);
+        Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(getSigningKey(SECRET_KEY)).build().parseClaimsJws(accessToken);
 
         return (String) claims.getBody().get("user");
     }
