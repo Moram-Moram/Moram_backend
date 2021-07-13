@@ -24,7 +24,7 @@ public class User {
     private boolean whiteCheck;
     @Setter
     @Convert(converter = AuthorityAttributeConverter.class)
-    private Authority role = Authority.ROLE_WATER_DROP;
+    private Authority role = Authority.WATER_DROP;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, mappedBy = "id", orphanRemoval = true)
     private List<Post> posts = new ArrayList<>();
 
