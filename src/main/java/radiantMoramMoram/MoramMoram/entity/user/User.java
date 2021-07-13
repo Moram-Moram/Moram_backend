@@ -12,6 +12,7 @@ import java.security.NoSuchAlgorithmException;
 @Table(name = "tbl_user")
 @Entity
 public class User {
+
     @Id
     private String id;
     private String password;
