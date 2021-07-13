@@ -8,11 +8,13 @@ import radiantMoramMoram.MoramMoram.entity.post.Post;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.ManyToOne;
 
 @Entity(name = "tbl_category")
 @Getter
 @Builder
+@IdClass(CategoryKey.class)
 @NoArgsConstructor
 @AllArgsConstructor
 public class Category {

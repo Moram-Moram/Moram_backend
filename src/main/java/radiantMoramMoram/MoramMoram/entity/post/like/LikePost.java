@@ -7,13 +7,12 @@ import lombok.NoArgsConstructor;
 import radiantMoramMoram.MoramMoram.entity.post.Post;
 import radiantMoramMoram.MoramMoram.entity.user.User;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 @Entity(name = "tbl_like")
 @Getter
 @Builder
+@IdClass(LikePostKey.class)
 @NoArgsConstructor
 @AllArgsConstructor
 public class LikePost {
@@ -23,6 +22,6 @@ public class LikePost {
     private Post post;
 
     @Id
-    @OneToOne
+    @ManyToOne
     private User user;
 }
