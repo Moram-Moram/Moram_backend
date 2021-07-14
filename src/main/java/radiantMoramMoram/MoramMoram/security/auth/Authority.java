@@ -5,11 +5,11 @@ import lombok.Getter;
 
 @Getter
 public enum Authority {
-    ROLE_WATER_DROP(0, "물방울"),
-    ROLE_SCOTCH_MIST(1, "안개비"),
-    ROLE_DRIZZLE(2, "이슬비"),
-    ROLE_SHOWER(3, "소나기"),
-    ROLE_ADMIN(4, "어드민");
+    WATER_DROP(0, "물방울"),
+    SCOTCH_MIST(1, "안개비"),
+    DRIZZLE(2, "이슬비"),
+    SHOWER(3, "소나기"),
+    ADMIN(4, "어드민");
 
     public int num;
     public String ex;
