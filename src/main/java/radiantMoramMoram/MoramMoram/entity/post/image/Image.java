@@ -18,10 +18,11 @@ import javax.persistence.ManyToOne;
 public class Image {
 
     @Id
+    private int id;
+
     @ManyToOne
     private Post post;
 
-    @Id
     private String fileName;
 
 }
