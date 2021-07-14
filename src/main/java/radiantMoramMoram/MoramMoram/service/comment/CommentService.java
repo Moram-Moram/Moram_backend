@@ -2,17 +2,20 @@ package radiantMoramMoram.MoramMoram.service.comment;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
 import radiantMoramMoram.MoramMoram.entity.post.comment.Comment;
 import radiantMoramMoram.MoramMoram.exception.PostNotFoundException;
 import radiantMoramMoram.MoramMoram.payload.request.comment.WriteCommentRequest;
-import radiantMoramMoram.MoramMoram.repository.CommentRepository;
-import radiantMoramMoram.MoramMoram.repository.UserRepository;
-import radiantMoramMoram.MoramMoram.repository.post.PostRepository;
 
-// 댓글 작성
-// 댓글 보기...? 댓글 리스트 넘기기
-// 랜덤 포스트
-// 포스트 리스트
+import radiantMoramMoram.MoramMoram.payload.response.comment.CommentResponse;
+import radiantMoramMoram.MoramMoram.repository.CommentRepository;
+import radiantMoramMoram.MoramMoram.repository.post.PostRepository;
+import radiantMoramMoram.MoramMoram.repository.UserRepository;
+
+import javax.transaction.Transactional;
+import java.util.ArrayList;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -31,4 +34,23 @@ public class CommentService {
         commentRepository
                 .save(comment);
     }
+
+
+    @Transactional
+    public List<CommentResponse> commentList(int postId){
+
+        List<Comment> comments = commentRepository.findByPost_Id(postId);
+        List<CommentResponse> commentList = new ArrayList<>();
+        for(Comment c : comments){
+            CommentResponse comment = CommentResponse
+                    .builder()
+                    .content(c.getContent())
+                    .userNickName(c.getUser().getNickname())
+                    .regDate(c.getRegDate())
+                    .build();
+            commentList.add(comment);
+        }
+        return commentList;
+    }
+
 }

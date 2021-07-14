@@ -27,4 +27,10 @@ public class CommentController {
         commentService.writeComment(commentReq, userId, postId);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+
+    @GetMapping("/post/{postId}")
+    public List<CommentResponse> commentList(@PathVariable int postId){
+        return commentService.commentList(postId);
+    }
+
 }
