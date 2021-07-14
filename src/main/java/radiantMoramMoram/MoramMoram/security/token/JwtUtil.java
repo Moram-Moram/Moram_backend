@@ -4,10 +4,11 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import radiantMoramMoram.MoramMoram.exception.TokenErrorCode;
+import radiantMoramMoram.MoramMoram.exception.TokenException;
 import radiantMoramMoram.MoramMoram.payload.request.user.TokenInfoRequest;
 import radiantMoramMoram.MoramMoram.payload.response.token.TokenResponse;
 import radiantMoramMoram.MoramMoram.security.auth.Authority;
@@ -64,21 +65,18 @@ public class JwtUtil {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public boolean validateToken(String token){
+    public void validateToken(String token){
         try{
             Jwts.parserBuilder().setSigningKey(getSigningKey(SECRET_KEY)).build().parseClaimsJws(token);
-            return true;
         } catch (SecurityException | MalformedJwtException e){
-            log.info("잘못된 jwt 서명입니다.");
+            throw new TokenException(TokenErrorCode.INVALID_SIGNATURE);
         } catch (ExpiredJwtException e){
-            log.info("만료된 jwt 토큰입니다.");
+            throw new TokenException(TokenErrorCode.TOKEN_EXPIRED);
         } catch (UnsupportedJwtException e){
-            log.info("지원되지 않는 jwt 토큰입니다.");
+            throw new TokenException(TokenErrorCode.UNSUPPORTED_TOKEN);
         } catch (IllegalArgumentException e){
-            log.info("jwt 토큰이 잘못되었습니다.");
+            throw new TokenException(TokenErrorCode.INVALID_TOKEN);
         }
-        return false;
-
     }
 
     public UserDetails userAuthReturn(String id){
@@ -87,8 +85,9 @@ public class JwtUtil {
 
 
     public String getUserIdFromJwtToken(String accessToken){
-        Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(getSigningKey(SECRET_KEY)).build().parseClaimsJws(accessToken);
-
-        return (String) claims.getBody().get("user");
+        return (String) Jwts.parserBuilder().setSigningKey(getSigningKey(SECRET_KEY))
+                .build()
+                .parseClaimsJws(accessToken)
+                .getBody().get("user");
     }
 }
