@@ -1,4 +1,4 @@
-package radiantMoramMoram.MoramMoram.exception;
+package radiantMoramMoram.MoramMoram.error;
 
 import lombok.Getter;
 
