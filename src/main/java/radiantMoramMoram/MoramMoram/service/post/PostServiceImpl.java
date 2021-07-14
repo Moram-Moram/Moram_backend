@@ -46,7 +46,7 @@ public class PostServiceImpl implements PostService {
                 Post.builder()
                         .title(writePostRequest.getTitle())
                         .content(writePostRequest.getContent())
-                        .userId(writePostRequest.getUserId())
+                        .user(writePostRequest.getUser())
                         .build()
         );
 
@@ -88,16 +88,10 @@ public class PostServiceImpl implements PostService {
                 .stream().map(Image::getFileName)
                 .collect(Collectors.toList());
 
-        List<String> categoryNames = categoryRepository.findByPostIdOrderById(postId).stream()
-                .map(Category::getCategory)
-                .map(CategoryEnum::getName)
-                .collect(Collectors.toList());
-
         return GetPostResponse.builder()
                 .title(post.getTitle())
                 .content(post.getContent())
-                .userId(post.getUserId())
-                .category(categoryNames)
+                .user(post.getUser())
                 .image(fileNames)
                 .build();
     }
