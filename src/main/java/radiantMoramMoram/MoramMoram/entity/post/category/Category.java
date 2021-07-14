@@ -6,11 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import radiantMoramMoram.MoramMoram.entity.post.Post;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Entity(name = "tbl_category")
+@IdClass(CategoryKey.class)
 @Getter
 @Builder
 @NoArgsConstructor
@@ -19,9 +18,12 @@ public class Category {
 
     @Id
     @ManyToOne
+    @Column(name = "post_id")
     private Post post;
 
     @Id
+    @Column(name = "name")
+    @Enumerated(EnumType.STRING)
     private CategoryEnum category;
 
 }
