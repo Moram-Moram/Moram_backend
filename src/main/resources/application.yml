@@ -1,24 +1,34 @@
 server:
-  port: 8000
+  port: 8088
   jackson:
     property-naming-strategy: SNAKE_CASE
 
 spring:
   datasource:
-    url: ${MYSQL_URL}
-    driver-class-name: com.mysql.cj.jdbc.Driver
-
+    url: jdbc:h2:tcp://localhost/~/test
+    driver-class-name: org.h2.Driver
+    name: sa
+    password: ${H2_PASSWORD:1234}
   redis:
     host: ${REDIS_HOST:localhost}
-    port: ${REDIS_PORT:}
+    port: ${REDIS_PORT:6379}
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
 
 auth:
   jwt:
-    secret: ${JWT_SECRET_KEY:dGVzdA==}
+    secret: ${JWT_SECRET:}
     exp:
       access: ${JWT_ACCESS_EXP:3600}
       refresh: ${JWT_REFRESH_EXP:3600}
     header:
       access: ${JWT_HEADER:Authorization}
-      refresh: ${JWT_REFRESH_HEADER:X-Refresh-Token}
+      refresh: ${JWT_REFRESH_HEADER:Refresh-Token}
     prefix: ${JWT_PREFIX:Bearer}
+
+post:
+  file:
+    path: ${IMAGE_PATH:/}
