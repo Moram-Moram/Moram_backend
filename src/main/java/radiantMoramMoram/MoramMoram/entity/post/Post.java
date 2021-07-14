@@ -4,9 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import radiantMoramMoram.MoramMoram.entity.user.User;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 @Entity(name = "tbl_post")
 @Getter
@@ -22,7 +24,8 @@ public class Post {
 
     private String content;
 
-    private String userId;
+    @ManyToOne
+    private User user;
 
     private boolean report;
 
