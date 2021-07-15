@@ -7,7 +7,7 @@ import radiantMoramMoram.MoramMoram.payload.response.GetPostResponse;
 
 public interface PostService {
 
-    void writePost(WritePostRequest writePostRequest);
+    void writePost(WritePostRequest writePostRequest, String token);
 
     GetPostResponse getPost(Integer postId);
 
