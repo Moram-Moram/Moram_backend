@@ -25,5 +25,4 @@ public class WritePostRequest {
     private MultipartFile[] image;
 
     private String[] category;
-
 }
