@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
+import radiantMoramMoram.MoramMoram.entity.user.User;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class GetPostResponse {
 
     private String content;
 
-    private String userId;
+    private User user;
 
     private List<String> image;
 

@@ -7,6 +7,4 @@ import radiantMoramMoram.MoramMoram.entity.post.Post;
 @Repository
 public interface PostRepository extends JpaRepository<Post, Integer> {
 
-    void deleteByPostId(Integer postId);
-
 }

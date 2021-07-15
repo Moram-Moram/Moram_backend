@@ -12,14 +12,17 @@ import radiantMoramMoram.MoramMoram.entity.post.image.Image;
 import radiantMoramMoram.MoramMoram.entity.post.like.LikePost;
 import radiantMoramMoram.MoramMoram.entity.user.User;
 import radiantMoramMoram.MoramMoram.exception.PostNotFoundException;
+import radiantMoramMoram.MoramMoram.exception.UserNotFoundException;
 import radiantMoramMoram.MoramMoram.payload.request.post.LikePostRequest;
 import radiantMoramMoram.MoramMoram.payload.request.post.ReportPostRequest;
 import radiantMoramMoram.MoramMoram.payload.request.post.WritePostRequest;
 import radiantMoramMoram.MoramMoram.payload.response.GetPostResponse;
+import radiantMoramMoram.MoramMoram.repository.UserRepository;
 import radiantMoramMoram.MoramMoram.repository.post.CategoryRepository;
 import radiantMoramMoram.MoramMoram.repository.post.ImageRepository;
 import radiantMoramMoram.MoramMoram.repository.post.LikePostRepository;
 import radiantMoramMoram.MoramMoram.repository.post.PostRepository;
+import radiantMoramMoram.MoramMoram.security.token.JwtUtil;
 
 import java.io.File;
 import java.util.List;
@@ -30,6 +33,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
 
+    private final JwtUtil jwtUtil;
+
+    private final UserRepository userRepository;
     private final PostRepository postRepository;
     private final CategoryRepository categoryRepository;
     private final ImageRepository imageRepository;
@@ -40,13 +46,16 @@ public class PostServiceImpl implements PostService {
 
     @SneakyThrows
     @Override
-    public void writePost(WritePostRequest writePostRequest) {
+    public void writePost(WritePostRequest writePostRequest, String token) {
+
+        User user = userRepository.findById(jwtUtil.parseToken(token))
+                .orElseThrow(UserNotFoundException::new);
 
         Post post = postRepository.save(
                 Post.builder()
                         .title(writePostRequest.getTitle())
                         .content(writePostRequest.getContent())
-                        .userId(writePostRequest.getUserId())
+                        .user(user)
                         .build()
         );
 
@@ -58,7 +67,7 @@ public class PostServiceImpl implements PostService {
 
             imageRepository.save(
                     Image.builder()
-                            .post(writePostRequest.getPost())
+                            .post(post)
                             .fileName(fileName)
                             .build()
             );
@@ -70,7 +79,7 @@ public class PostServiceImpl implements PostService {
         for (String category : writePostRequest.getCategory()) {
             categoryRepository.save(
                     Category.builder()
-                            .post(writePostRequest.getPost())
+                            .post(post)
                             .category(CategoryEnum.valueOf(category))
                             .build()
             );
@@ -88,33 +97,31 @@ public class PostServiceImpl implements PostService {
                 .stream().map(Image::getFileName)
                 .collect(Collectors.toList());
 
-        List<String> categoryNames = categoryRepository.findByPostIdOrderById(postId).stream()
-                .map(Category::getCategory)
-                .map(CategoryEnum::getName)
-                .collect(Collectors.toList());
-
         return GetPostResponse.builder()
                 .title(post.getTitle())
                 .content(post.getContent())
-                .userId(post.getUserId())
-                .category(categoryNames)
+                .user(post.getUser())
                 .image(fileNames)
                 .build();
     }
 
     @Override
     public void deletePost(Integer postId) {
+
         postRepository.findById(postId)
                 .orElseThrow(PostNotFoundException::new);
 
-        postRepository.deleteByPostId(postId);
+        postRepository.deleteById(postId);
     }
 
     @Override
     public void likePost(LikePostRequest likePostRequest) {
 
-        User user = likePostRequest.getUser();
-        Post post = likePostRequest.getPost();
+        User user = userRepository.findById(likePostRequest.getUser())
+                .orElseThrow(UserNotFoundException::new);
+
+        Post post = postRepository.findById(likePostRequest.getPost())
+                .orElseThrow(PostNotFoundException::new);
 
         boolean isLikePosted = likePostRepository.existsByPostAndUser(post, user);
 

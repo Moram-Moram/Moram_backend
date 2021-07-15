@@ -9,7 +9,4 @@ import java.util.List;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, CategoryKey> {
-
-    List<Category> findByPostIdOrderById(Integer postId);
-
 }

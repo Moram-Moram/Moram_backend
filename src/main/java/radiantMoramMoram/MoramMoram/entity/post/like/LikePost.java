@@ -10,6 +10,7 @@ import radiantMoramMoram.MoramMoram.entity.user.User;
 import javax.persistence.*;
 
 @Entity(name = "tbl_like")
+@IdClass(LikePostKey.class)
 @Getter
 @Builder
 @IdClass(LikePostKey.class)

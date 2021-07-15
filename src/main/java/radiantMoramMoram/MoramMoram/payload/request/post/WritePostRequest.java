@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 import radiantMoramMoram.MoramMoram.entity.post.Post;
+import radiantMoramMoram.MoramMoram.entity.user.User;
 
 @Getter
 @Builder
@@ -13,13 +14,13 @@ import radiantMoramMoram.MoramMoram.entity.post.Post;
 @AllArgsConstructor
 public class WritePostRequest {
 
-    private Post post;
+    private int post;
 
     private String title;
 
     private String content;
 
-    private String userId;
+    private String  user;
 
     private MultipartFile[] image;
 

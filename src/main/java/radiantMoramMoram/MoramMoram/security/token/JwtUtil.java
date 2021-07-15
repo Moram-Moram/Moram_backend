@@ -6,6 +6,8 @@ import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import radiantMoramMoram.MoramMoram.exception.ExpiredTokenException;
+import radiantMoramMoram.MoramMoram.exception.InvalidTokenException;
 import radiantMoramMoram.MoramMoram.payload.request.user.TokenInfoRequest;
 import radiantMoramMoram.MoramMoram.payload.response.token.TokenResponse;
 import radiantMoramMoram.MoramMoram.security.auth.Authority;
@@ -60,6 +62,20 @@ public class JwtUtil {
 
 
         return jwt;
+    }
+
+    public String parseToken(String token) throws ExpiredJwtException {
+        String result;
+        try {
+            result = Jwts.parser().setSigningKey(SECRET_KEY.getBytes()).parseClaimsJws(token).getBody().getSubject();
+            if(!Jwts.parser().setSigningKey(SECRET_KEY.getBytes()).parseClaimsJws(token).getBody().get("type").equals("access_token"))
+                throw new InvalidTokenException();
+        } catch (ExpiredJwtException e) {
+            throw new ExpiredTokenException();
+        } catch (MalformedJwtException e) {
+            throw new InvalidTokenException();
+        }
+        return token;
     }
 
     private Key getSigningKey(String secretKey){
