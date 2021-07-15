@@ -25,8 +25,7 @@ import radiantMoramMoram.MoramMoram.repository.post.PostRepository;
 import radiantMoramMoram.MoramMoram.security.token.JwtUtil;
 
 import java.io.File;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -48,7 +47,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public void writePost(WritePostRequest writePostRequest, String token) {
 
-        User user = userRepository.findById(jwtUtil.parseToken(token))
+        User user = userRepository.findById(jwtUtil.getUserIdFromJwtToken(token))
                 .orElseThrow(UserNotFoundException::new);
 
         Post post = postRepository.save(
@@ -151,6 +150,29 @@ public class PostServiceImpl implements PostService {
             );
         }
 
+    }
+
+    public GetPostResponse randomPost(){
+
+        Long number = postRepository.count();
+        Random random = new Random();
+        int r = random.nextInt(number.intValue());
+        if(r==0) r++;
+
+        Optional<Post> post = postRepository.findById(r);
+        post.orElse(postRepository.findRandomPost());
+
+        List<String> fileNames = imageRepository.findByPostOrderById(post.get().getId())
+                .stream().map(Image::getFileName)
+                .collect(Collectors.toList());
+
+        return GetPostResponse.builder()
+                .postId(post.get().getId())
+                .title(post.get().getTitle())
+                .content(post.get().getContent())
+                .user(post.get().getUser())
+                .image(fileNames)
+                .build();
     }
 
 

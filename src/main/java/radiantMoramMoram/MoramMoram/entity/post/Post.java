@@ -9,6 +9,7 @@ import radiantMoramMoram.MoramMoram.entity.user.User;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import java.time.LocalDate;
 
 @Entity(name = "tbl_post")
 @Getter
@@ -23,6 +24,8 @@ public class Post {
     private String title;
 
     private String content;
+
+    private LocalDate create_at;
 
     @ManyToOne
     private User user;
