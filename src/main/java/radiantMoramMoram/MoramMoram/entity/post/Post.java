@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import radiantMoramMoram.MoramMoram.entity.user.User;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity(name = "tbl_post")
 @Getter
@@ -22,6 +23,8 @@ public class Post {
     private String title;
 
     private String content;
+
+    private LocalDate date;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id")
