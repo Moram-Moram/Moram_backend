@@ -18,7 +18,6 @@ public class Category {
 
     @Id
     @ManyToOne
-    @Column(name = "post_id")
     private Post post;
 
     @Id
