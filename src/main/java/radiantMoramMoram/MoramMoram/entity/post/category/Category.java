@@ -12,7 +12,6 @@ import javax.persistence.*;
 @IdClass(CategoryKey.class)
 @Getter
 @Builder
-@IdClass(CategoryKey.class)
 @NoArgsConstructor
 @AllArgsConstructor
 public class Category {
