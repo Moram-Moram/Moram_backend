@@ -16,9 +16,10 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping
-    public void writePost(@RequestBody WritePostRequest writePostRequest) {
+    public void writePost(@RequestBody WritePostRequest writePostRequest,
+                          @RequestHeader("Authorization") String token) {
 
-        postService.writePost(writePostRequest);
+        postService.writePost(writePostRequest, token);
 
     };
 
