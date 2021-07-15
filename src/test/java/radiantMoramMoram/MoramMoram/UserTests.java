@@ -4,9 +4,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import radiantMoramMoram.MoramMoram.payload.request.user.SignUpRequest;
+import radiantMoramMoram.MoramMoram.repository.UserRepository;
+import radiantMoramMoram.MoramMoram.security.auth.Authority;
 import radiantMoramMoram.MoramMoram.service.user.UserService;
 import radiantMoramMoram.MoramMoram.entity.user.User;
-import radiantMoramMoram.MoramMoram.entity.user.UserBuilder;
+
+import java.util.Optional;
 
 
 @SpringBootTest(properties = "classpath:/application.yml")
@@ -14,6 +17,8 @@ public class UserTests {
     @Autowired
     UserService userService;
 
+    @Autowired
+    UserRepository userRepository;
 
     @Test
     public void joinTest(){
@@ -30,5 +35,12 @@ public class UserTests {
                 .build();
 
         userService.join(signUpReq);
+    }
+
+    @Test
+    public void roleUp(){
+        Optional<User> user = userRepository.findById("00000");
+        user.get().setRole(Authority.ADMIN);
+        userRepository.save(user.get());
     }
 }

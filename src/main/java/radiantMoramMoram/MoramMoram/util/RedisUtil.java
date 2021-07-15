@@ -1,7 +1,6 @@
 package radiantMoramMoram.MoramMoram.util;
 
-import io.jsonwebtoken.Jwts;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
@@ -9,10 +8,10 @@ import org.springframework.stereotype.Service;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
+@RequiredArgsConstructor
 @Service
 public class RedisUtil {
-    @Autowired
-    private StringRedisTemplate stringRedisTemplate;
+    private final StringRedisTemplate stringRedisTemplate;
 
     public String getData(String key){
         ValueOperations<String, String> valueOperations = stringRedisTemplate.opsForValue();
