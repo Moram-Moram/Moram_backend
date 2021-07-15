@@ -5,13 +5,19 @@ server:
 
 spring:
   datasource:
-    url: jdbc:h2:tcp://localhost/~/test
-    driver-class-name: org.h2.Driver
-    name: sa
-    password: ${H2_PASSWORD:1234}
+    url: ${DATABASE_URL:}
+    driver-class-name: com.mysql.cj.jdbc.Driver
   redis:
     host: ${REDIS_HOST:localhost}
     port: ${REDIS_PORT:6379}
+
+posts:
+  image:
+    path: ${IMAGE_PATH:/}
+
+image:
+  upload:
+    dir: /
 
   jpa:
     hibernate:
