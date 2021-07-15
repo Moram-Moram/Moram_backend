@@ -9,7 +9,8 @@ import radiantMoramMoram.MoramMoram.payload.response.GetPostResponse;
 import radiantMoramMoram.MoramMoram.service.post.PostService;
 
 @RequiredArgsConstructor
-@RestController("/post")
+@RestController
+@RequestMapping("/post")
 public class PostController {
 
     private final PostService postService;
