@@ -13,7 +13,7 @@ import radiantMoramMoram.MoramMoram.entity.user.User;
 @AllArgsConstructor
 public class LikePostRequest {
 
-    private User user;
+    private String user;
 
-    private Post post;
+    private int post;
 }
