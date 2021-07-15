@@ -107,17 +107,21 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void deletePost(Integer postId) {
+
         postRepository.findById(postId)
                 .orElseThrow(PostNotFoundException::new);
 
-        postRepository.deleteByPostId(postId);
+        postRepository.deleteById(postId);
     }
 
     @Override
     public void likePost(LikePostRequest likePostRequest) {
 
-        User user = likePostRequest.getUser();
-        Post post = likePostRequest.getPost();
+        User user = userRepository.findById(likePostRequest.getUser())
+                .orElseThrow(UserNotFoundException::new);
+
+        Post post = postRepository.findById(likePostRequest.getPost())
+                .orElseThrow(PostNotFoundException::new);
 
         boolean isLikePosted = likePostRepository.existsByPostAndUser(post, user);
 
