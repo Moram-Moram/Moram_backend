@@ -4,7 +4,7 @@ import org.springframework.data.domain.Pageable;
 import radiantMoramMoram.MoramMoram.payload.response.admin.ReportListResponse;
 import radiantMoramMoram.MoramMoram.payload.response.admin.ReportPostResponse;
 
-public interface AdminSignInService {
+public interface ReportService {
 
     ReportListResponse getReportList(Pageable pageable);
 
