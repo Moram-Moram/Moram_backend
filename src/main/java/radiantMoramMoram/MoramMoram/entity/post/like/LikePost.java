@@ -13,7 +13,6 @@ import javax.persistence.*;
 @IdClass(LikePostKey.class)
 @Getter
 @Builder
-@IdClass(LikePostKey.class)
 @NoArgsConstructor
 @AllArgsConstructor
 public class LikePost {
