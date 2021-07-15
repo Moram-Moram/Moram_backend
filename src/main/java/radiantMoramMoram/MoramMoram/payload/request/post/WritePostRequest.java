@@ -14,13 +14,13 @@ import radiantMoramMoram.MoramMoram.entity.user.User;
 @AllArgsConstructor
 public class WritePostRequest {
 
-    private Post post;
+    private int post;
 
     private String title;
 
     private String content;
 
-    private User user;
+    private String  user;
 
     private MultipartFile[] image;
 
