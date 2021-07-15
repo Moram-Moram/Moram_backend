@@ -48,7 +48,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public void writePost(WritePostRequest writePostRequest, String token) {
 
-        User user = userRepository.findById(jwtUtil.parseToken(token))
+        User user = userRepository.findById(jwtUtil.getUserIdFromJwtToken(token))
                 .orElseThrow(UserNotFoundException::new);
 
         Post post = postRepository.save(
