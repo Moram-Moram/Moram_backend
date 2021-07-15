@@ -6,7 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import radiantMoramMoram.MoramMoram.entity.user.User;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 @Entity(name = "tbl_post")
 @Getter
@@ -16,18 +18,16 @@ import javax.persistence.*;
 public class Post {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     private String title;
 
     private String content;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id")
+    @ManyToOne
     private User user;
 
-    private boolean report = false;
+    private boolean report;
 
     public Post setReport(boolean report) {
         this.report = report;

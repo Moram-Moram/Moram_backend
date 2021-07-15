@@ -9,7 +9,7 @@ public class BasicException extends RuntimeException{
 
     public BasicException(ErrorCode errorCode) {
         super(errorCode.getMessage());
-
         this.errorCode = errorCode;
     }
+
 }

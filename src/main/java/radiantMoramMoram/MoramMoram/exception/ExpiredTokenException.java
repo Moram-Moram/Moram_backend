@@ -3,10 +3,9 @@ package radiantMoramMoram.MoramMoram.exception;
 import radiantMoramMoram.MoramMoram.error.BasicException;
 import radiantMoramMoram.MoramMoram.error.ErrorCode;
 
-public class PostNotFoundException extends BasicException {
+public class ExpiredTokenException extends BasicException {
 
-    public PostNotFoundException() {
-        super(ErrorCode.POST_NOT_FOUND);
+    public ExpiredTokenException() {
+        super(ErrorCode.EXPIRED_TOKEN);
     }
-
 }
