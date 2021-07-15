@@ -62,20 +62,6 @@ public class JwtUtil {
                 .compact();
     }
 
-    public String parseToken(String token) throws ExpiredJwtException {
-        String result;
-        try {
-            result = Jwts.parser().setSigningKey(SECRET_KEY.getBytes()).parseClaimsJws(token).getBody().getSubject();
-            if(!Jwts.parser().setSigningKey(SECRET_KEY.getBytes()).parseClaimsJws(token).getBody().get("type").equals("access_token"))
-                throw new InvalidTokenException();
-        } catch (ExpiredJwtException e) {
-            throw new ExpiredTokenException();
-        } catch (MalformedJwtException e) {
-            throw new InvalidTokenException();
-        }
-        return token;
-    }
-
     private Key getSigningKey(String secretKey){
         byte[] keyBytes = secretKey.getBytes();
         return Keys.hmacShaKeyFor(keyBytes);
