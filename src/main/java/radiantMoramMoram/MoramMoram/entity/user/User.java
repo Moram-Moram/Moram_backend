@@ -2,12 +2,16 @@ package radiantMoramMoram.MoramMoram.entity.user;
 
 import lombok.Getter;
 import lombok.Setter;
+import radiantMoramMoram.MoramMoram.entity.post.Post;
 import radiantMoramMoram.MoramMoram.security.auth.Authority;
 import radiantMoramMoram.MoramMoram.security.auth.AuthorityAttributeConverter;
 
 import javax.persistence.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Table(name = "tbl_user")
 @Entity
@@ -20,7 +24,9 @@ public class User {
     private boolean whiteCheck;
     @Setter
     @Convert(converter = AuthorityAttributeConverter.class)
-    private Authority role = Authority.ROLE_WATER_DROP;
+    private Authority role = Authority.WATER_DROP;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, mappedBy = "id", orphanRemoval = true)
+    private List<Post> posts = new ArrayList<>();
 
     public User() {
 

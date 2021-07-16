@@ -7,7 +7,6 @@ import radiantMoramMoram.MoramMoram.entity.user.User;
 import radiantMoramMoram.MoramMoram.entity.user.UserBuilder;
 import radiantMoramMoram.MoramMoram.error.BasicException;
 import radiantMoramMoram.MoramMoram.error.ErrorCode;
-import radiantMoramMoram.MoramMoram.exception.UserAlreadyExistsException;
 import radiantMoramMoram.MoramMoram.payload.request.user.LoginRequest;
 import radiantMoramMoram.MoramMoram.payload.request.user.SignUpRequest;
 import radiantMoramMoram.MoramMoram.payload.request.user.TokenInfoRequest;
@@ -51,17 +50,4 @@ public class UserServiceImpl implements UserService {
 
         return jwtUtil.createToken(tokenInfoReq);
     }
-
-    public void duplicateCheck(SignUpRequest signUpRequest) {
-        userRepository.findById(signUpRequest.getId())
-                .ifPresent(u -> {
-                    throw new UserAlreadyExistsException();
-                });
-
-        userRepository.findByNickname(signUpRequest.getNickname())
-                .ifPresent(user -> {
-                    throw new UserAlreadyExistsException();
-                });
-    }
-
 }

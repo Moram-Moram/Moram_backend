@@ -9,9 +9,9 @@ import lombok.ToString;
 @Getter
 @Setter
 public class TokenResponse {
-    @JsonProperty("access-token")
+    @JsonProperty("accessToken")
     private String accessJws;
-    @JsonProperty("refresh-token")
+    @JsonProperty("refreshToken")
     private String refreshJws;
 
 

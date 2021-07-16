@@ -1,4 +1,7 @@
 
+.idea/
+.gradle/**
+
 src/.DS_Store
 
 src/main/.idea/misc.xml
@@ -18,9 +21,3 @@ src/main/main.iml
 .DS_Store
 
 build/
-
-.gradle/
-
-.idea/
-
-src/test/test.iml
