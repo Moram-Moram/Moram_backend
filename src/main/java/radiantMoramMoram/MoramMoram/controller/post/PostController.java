@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import radiantMoramMoram.MoramMoram.payload.request.post.LikePostRequest;
 import radiantMoramMoram.MoramMoram.payload.request.post.ReportPostRequest;
 import radiantMoramMoram.MoramMoram.payload.request.post.WritePostRequest;
-import radiantMoramMoram.MoramMoram.payload.response.GetPostResponse;
+import radiantMoramMoram.MoramMoram.payload.response.post.GetPostResponse;
 import radiantMoramMoram.MoramMoram.service.post.PostService;
 
 @RequiredArgsConstructor
@@ -51,4 +51,8 @@ public class PostController {
 
     };
 
+    @GetMapping("/random/{click}")
+    public GetPostResponse randomPost(@PathVariable("click") int click){
+        return postService.randomPost(click);
+    }
 }

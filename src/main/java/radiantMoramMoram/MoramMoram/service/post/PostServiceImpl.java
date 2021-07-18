@@ -152,15 +152,20 @@ public class PostServiceImpl implements PostService {
 
     }
 
-    public GetPostResponse randomPost(){
+    public GetPostResponse randomPost(int num){
 
         Long number = postRepository.count();
         Random random = new Random();
         int r = random.nextInt(number.intValue());
-        if(r==0) r++;
+        if(r==0) r=num;
 
         Optional<Post> post = postRepository.findById(r);
-        post.orElse(postRepository.findRandomPost());
+        if(post.isEmpty()){
+            System.out.println("빔");
+            post.map((t)->postRepository.findRandomPost()); // 일딴 보류!
+        }
+        post.orElseGet(postRepository::findRandomPost);
+        post.orElseThrow(() -> new BasicException(ErrorCode.POST_NOT_FOUND));
 
         List<String> fileNames = imageRepository.findByPostOrderById(post.get().getId())
                 .stream().map(Image::getFileName)
@@ -170,10 +175,12 @@ public class PostServiceImpl implements PostService {
                 .postId(post.get().getId())
                 .title(post.get().getTitle())
                 .content(post.get().getContent())
-                .user(post.get().getUser())
+                .userId(post.get().getUser().getId())
                 .image(fileNames)
                 .build();
     }
 
-
+//    public List<GetPostResponse> getPostList(){
+//
+//    }
 }
