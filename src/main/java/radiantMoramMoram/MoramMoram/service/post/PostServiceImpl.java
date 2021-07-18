@@ -11,12 +11,14 @@ import radiantMoramMoram.MoramMoram.entity.post.Post;
 import radiantMoramMoram.MoramMoram.entity.post.image.Image;
 import radiantMoramMoram.MoramMoram.entity.post.like.LikePost;
 import radiantMoramMoram.MoramMoram.entity.user.User;
+import radiantMoramMoram.MoramMoram.error.BasicException;
+import radiantMoramMoram.MoramMoram.error.ErrorCode;
 import radiantMoramMoram.MoramMoram.exception.PostNotFoundException;
 import radiantMoramMoram.MoramMoram.exception.UserNotFoundException;
 import radiantMoramMoram.MoramMoram.payload.request.post.LikePostRequest;
 import radiantMoramMoram.MoramMoram.payload.request.post.ReportPostRequest;
 import radiantMoramMoram.MoramMoram.payload.request.post.WritePostRequest;
-import radiantMoramMoram.MoramMoram.payload.response.GetPostResponse;
+import radiantMoramMoram.MoramMoram.payload.response.post.GetPostResponse;
 import radiantMoramMoram.MoramMoram.repository.UserRepository;
 import radiantMoramMoram.MoramMoram.repository.post.CategoryRepository;
 import radiantMoramMoram.MoramMoram.repository.post.ImageRepository;
@@ -99,7 +101,7 @@ public class PostServiceImpl implements PostService {
         return GetPostResponse.builder()
                 .title(post.getTitle())
                 .content(post.getContent())
-                .user(post.getUser())
+                .userId(post.getUser().getId())
                 .image(fileNames)
                 .build();
     }
