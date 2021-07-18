@@ -24,6 +24,7 @@ public class Post {
 
     private String content;
 
+    @Column(name = "create_at")
     private LocalDate date;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
