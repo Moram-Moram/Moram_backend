@@ -14,4 +14,6 @@ public interface LikePostRepository extends JpaRepository<LikePost, LikePostKey>
 
     void deleteByPostAndUser(Post post, User user);
 
+    Post findByPost(Post post);
+
 }
