@@ -1,5 +1,6 @@
 package radiantMoramMoram.MoramMoram.entity.post.image;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,7 @@ import javax.persistence.ManyToOne;
 @Getter
 @Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class Image {
 
     @Id
