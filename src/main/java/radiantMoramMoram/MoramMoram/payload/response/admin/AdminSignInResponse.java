@@ -10,6 +10,9 @@ import lombok.Getter;
 public class AdminSignInResponse {
 
     private final String accessToken;
-    private final String refreshToken;
+
+    private final String tokenType;
+
+    private final Long accessTokenExp;
 
 }
