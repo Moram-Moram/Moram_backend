@@ -7,6 +7,4 @@ public interface AdminService {
 
     AdminSignInResponse adminSignIn(AdminSignInRequest adminSignInRequest);
 
-
-
 }
