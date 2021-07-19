@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import radiantMoramMoram.MoramMoram.payload.request.post.LikePostRequest;
 import radiantMoramMoram.MoramMoram.payload.request.post.ReportPostRequest;
 import radiantMoramMoram.MoramMoram.payload.request.post.WritePostRequest;
-import radiantMoramMoram.MoramMoram.payload.response.GetPostResponse;
+import radiantMoramMoram.MoramMoram.payload.response.post.GetPostResponse;
 import radiantMoramMoram.MoramMoram.service.post.PostService;
 
 @RequiredArgsConstructor
@@ -23,9 +23,10 @@ public class PostController {
     };
 
     @GetMapping("/{postId}")
-    public GetPostResponse getPost(@RequestBody Integer postId) {
+    public GetPostResponse getPost(@RequestBody Integer postId,
+                                   @RequestHeader("Authorization") String token) {
 
-        return postService.getPost(postId);
+        return postService.getPost(postId, token);
 
     };
 
