@@ -16,7 +16,7 @@ import radiantMoramMoram.MoramMoram.exception.UserNotFoundException;
 import radiantMoramMoram.MoramMoram.payload.request.post.LikePostRequest;
 import radiantMoramMoram.MoramMoram.payload.request.post.ReportPostRequest;
 import radiantMoramMoram.MoramMoram.payload.request.post.WritePostRequest;
-import radiantMoramMoram.MoramMoram.payload.response.GetPostResponse;
+import radiantMoramMoram.MoramMoram.payload.response.post.GetPostResponse;
 import radiantMoramMoram.MoramMoram.repository.UserRepository;
 import radiantMoramMoram.MoramMoram.repository.post.CategoryRepository;
 import radiantMoramMoram.MoramMoram.repository.post.ImageRepository;
@@ -88,10 +88,15 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public GetPostResponse getPost(Integer postId) {
+    public GetPostResponse getPost(Integer postId, String token) {
 
         Post post = postRepository.findById(postId)
                 .orElseThrow(PostNotFoundException::new);
+
+        User user = userRepository.findById(jwtUtil.getUserIdFromJwtToken(token))
+                .orElseThrow(UserNotFoundException::new);
+
+        Post likePost = likePostRepository.findByPost(post);
 
         List<String> fileNames = imageRepository.findByPostOrderById(postId)
                 .stream().map(Image::getFileName)
@@ -100,8 +105,9 @@ public class PostServiceImpl implements PostService {
         return GetPostResponse.builder()
                 .title(post.getTitle())
                 .content(post.getContent())
-                .user(post.getUser())
+                .user(user.getId())
                 .image(fileNames)
+                .like(likePost.getId())
                 .build();
     }
 
