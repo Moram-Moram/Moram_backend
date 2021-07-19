@@ -20,10 +20,10 @@ public class GetPostResponse {
 
     private String content;
 
-    private String userId;
+    private String user;
 
     private List<String> image;
 
-    private List<String> category;
+    private Integer like;
 
 }
