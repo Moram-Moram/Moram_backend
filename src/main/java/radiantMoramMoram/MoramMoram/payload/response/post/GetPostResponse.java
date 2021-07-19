@@ -20,7 +20,7 @@ public class GetPostResponse {
 
     private String content;
 
-    private String userId;
+    private String userNickname;
 
     private List<String> image;
 

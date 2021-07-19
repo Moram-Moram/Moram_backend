@@ -101,7 +101,7 @@ public class PostServiceImpl implements PostService {
         return GetPostResponse.builder()
                 .title(post.getTitle())
                 .content(post.getContent())
-                .userId(post.getUser().getId())
+                .userNickname(post.getUser().getNickname())
                 .image(fileNames)
                 .build();
     }
@@ -176,7 +176,7 @@ public class PostServiceImpl implements PostService {
                 .postId(post.getId())
                 .title(post.getTitle())
                 .content(post.getContent())
-                .userId(post.getUser().getId())
+                .userNickname(post.getUser().getNickname())
                 .image(fileNames)
                 .build();
     }
