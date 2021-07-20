@@ -182,7 +182,9 @@ public class PostServiceImpl implements PostService {
             throw new BasicException(ErrorCode.POST_DOES_NOT_EXIST);
         }
 
-        List<String> fileNames = getFileFromPostId(post);
+        List<String> fileNames = getFileFromPost(post);
+
+        int likeNum = likePostRepository.postLikeNum(post.getId());
 
         return GetPostResponse.builder()
                 .postId(post.getId())
@@ -190,6 +192,7 @@ public class PostServiceImpl implements PostService {
                 .content(post.getContent())
                 .writer(post.getUser().getNickname())
                 .date(post.getDate())
+                .likeNum(likeNum)
                 .image(fileNames)
                 .build();
     }

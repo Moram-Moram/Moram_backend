@@ -1,6 +1,7 @@
 package radiantMoramMoram.MoramMoram.repository.post;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import radiantMoramMoram.MoramMoram.entity.post.Post;
 import radiantMoramMoram.MoramMoram.entity.post.like.LikePost;
@@ -15,5 +16,8 @@ public interface LikePostRepository extends JpaRepository<LikePost, LikePostKey>
     void deleteByPostAndUser(Post post, User user);
 
     Post findByPost(Post post);
+
+    @Query(value = "select count(*) from moram_moram.tbl_like where post_id = :postId", nativeQuery = true)
+    int postLikeNum(int postId);
 
 }
