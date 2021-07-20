@@ -1,19 +1,18 @@
 package radiantMoramMoram.MoramMoram.service.post;
 
 import lombok.RequiredArgsConstructor;
-<<<<<<<<< Temporary merge branch 1
 import org.springframework.stereotype.Service;
 import radiantMoramMoram.MoramMoram.entity.post.Post;
 import radiantMoramMoram.MoramMoram.payload.request.post.WritePostRequest;
+import radiantMoramMoram.MoramMoram.payload.response.post.GetPostResponse;
+import radiantMoramMoram.MoramMoram.payload.response.post.PostListResponse;
+import radiantMoramMoram.MoramMoram.payload.response.post.PostsResponse;
 import radiantMoramMoram.MoramMoram.repository.post.PostRepository;
-=========
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import radiantMoramMoram.MoramMoram.entity.post.category.Category;
 import radiantMoramMoram.MoramMoram.entity.post.category.CategoryEnum;
-import radiantMoramMoram.MoramMoram.entity.post.Post;
 import radiantMoramMoram.MoramMoram.entity.post.image.Image;
 import radiantMoramMoram.MoramMoram.entity.post.like.LikePost;
 import radiantMoramMoram.MoramMoram.entity.user.User;
@@ -23,20 +22,16 @@ import radiantMoramMoram.MoramMoram.exception.PostNotFoundException;
 import radiantMoramMoram.MoramMoram.exception.UserNotFoundException;
 import radiantMoramMoram.MoramMoram.payload.request.post.LikePostRequest;
 import radiantMoramMoram.MoramMoram.payload.request.post.ReportPostRequest;
-import radiantMoramMoram.MoramMoram.payload.request.post.WritePostRequest;
-import radiantMoramMoram.MoramMoram.payload.response.GetPostResponse;
 import radiantMoramMoram.MoramMoram.repository.UserRepository;
 import radiantMoramMoram.MoramMoram.repository.post.CategoryRepository;
 import radiantMoramMoram.MoramMoram.repository.post.ImageRepository;
 import radiantMoramMoram.MoramMoram.repository.post.LikePostRepository;
-import radiantMoramMoram.MoramMoram.repository.post.PostRepository;
 import radiantMoramMoram.MoramMoram.security.token.JwtUtil;
 
+import javax.transaction.Transactional;
 import java.io.File;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
->>>>>>>>> Temporary merge branch 2
 
 @Service
 @RequiredArgsConstructor
@@ -114,9 +109,9 @@ public class PostServiceImpl implements PostService {
         return GetPostResponse.builder()
                 .title(post.getTitle())
                 .content(post.getContent())
-                .writer(post.getUser().getNickname())
+                .writer(user.getNickname())
                 .image(fileNames)
-                .like(likePost.getId())
+                .likeNum(likePost.getId())
                 .build();
     }
 
@@ -214,7 +209,7 @@ public class PostServiceImpl implements PostService {
         List<PostListResponse> postList = new ArrayList<>();
 
         for(Post p : posts){
-            List<String> fileNames = getFileFromPostId(p);
+            List<String> fileNames = getFileFromPost(p);
 
             postList.add(
                     PostListResponse.builder()
@@ -235,7 +230,7 @@ public class PostServiceImpl implements PostService {
 
     }
 
-    private List<String> getFileFromPostId(Post post){
+    private List<String> getFileFromPost(Post post){
         return imageRepository.findByPostOrderById(post)
                 .stream().map(Image::getFileName)
                 .collect(Collectors.toList());
