@@ -28,6 +28,7 @@ import radiantMoramMoram.MoramMoram.repository.post.LikePostRepository;
 import radiantMoramMoram.MoramMoram.repository.post.PostRepository;
 import radiantMoramMoram.MoramMoram.security.token.JwtUtil;
 
+import javax.transaction.Transactional;
 import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -96,7 +97,9 @@ public class PostServiceImpl implements PostService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(PostNotFoundException::new);
 
-        List<String> fileNames = getFileFromPostId(postId);
+        List<String> fileNames = imageRepository.findByPostOrderById(postId)
+                .stream().map(Image::getFileName)
+                .collect(Collectors.toList());
 
         return GetPostResponse.builder()
                 .title(post.getTitle())
@@ -168,7 +171,7 @@ public class PostServiceImpl implements PostService {
             throw new BasicException(ErrorCode.POST_DOES_NOT_EXIST);
         }
 
-        List<String> fileNames = getFileFromPostId(post.getId());
+        List<String> fileNames = getFileFromPostId(post);
 
         return GetPostResponse.builder()
                 .postId(post.getId())
@@ -180,20 +183,30 @@ public class PostServiceImpl implements PostService {
                 .build();
     }
 
+    @Transactional
     public PostsResponse getPostList(String category){
 
-        List<Post> posts = postRepository.findAll();
+        List<Integer> postIdList = categoryRepository.categoryPostListReturn(category);
+
+        if(postIdList.isEmpty()){
+            throw new BasicException(ErrorCode.CATEGORY_NOT_FOUND);
+        }
+
+        List<Post> posts = new ArrayList<>();
+        for(int postId : postIdList){
+            posts.add(postRepository.findById(postId).orElseThrow(PostNotFoundException::new));
+        }
 
         List<PostListResponse> postList = new ArrayList<>();
 
-
         for(Post p : posts){
-            List<String> fileNames = getFileFromPostId(p.getId());
+            List<String> fileNames = getFileFromPostId(p);
+
             postList.add(
                     PostListResponse.builder()
                     .content(p.getContent())
                     .date(p.getDate())
-                    .image(fileNames.get(1))
+                    .image(fileNames.get(0))
                     .postId(p.getId())
                     .title(p.getTitle())
                     .writer(p.getUser().getNickname())
@@ -208,8 +221,8 @@ public class PostServiceImpl implements PostService {
 
     }
 
-    private List<String> getFileFromPostId(int postId){
-        return imageRepository.findByPostOrderById(postId)
+    private List<String> getFileFromPostId(Post post){
+        return imageRepository.findByPostOrderById(post)
                 .stream().map(Image::getFileName)
                 .collect(Collectors.toList());
     }

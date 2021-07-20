@@ -4,6 +4,7 @@ import radiantMoramMoram.MoramMoram.payload.request.post.LikePostRequest;
 import radiantMoramMoram.MoramMoram.payload.request.post.ReportPostRequest;
 import radiantMoramMoram.MoramMoram.payload.request.post.WritePostRequest;
 import radiantMoramMoram.MoramMoram.payload.response.post.GetPostResponse;
+import radiantMoramMoram.MoramMoram.payload.response.post.PostsResponse;
 
 public interface PostService {
 
@@ -18,5 +19,7 @@ public interface PostService {
     void reportPost(ReportPostRequest reportPostRequest);
 
     GetPostResponse randomPost(int num);
+
+    PostsResponse getPostList(String category);
 
 }
