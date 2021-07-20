@@ -11,7 +11,8 @@ spring:
   redis:
     host: ${REDIS_HOST:localhost}
     port: ${REDIS_PORT:6379}
-
+  jpa:
+    show-sql: true
 auth:
   jwt:
     secret: 45VCO4fzXw4O32IV0qF3hixZLWChc4WiB9li3mw-WPcnfe7c
@@ -20,7 +21,7 @@ auth:
       refresh: ${JWT_REFRESH_EXP:3600}
     header:
       access: ${JWT_HEADER:Authorization}
-      refresh: ${JWT_REFRESH_HEADER:X-Refresh-Token}
+      refresh: ${JWT_REFRESH_HEADER:Refresh-Token}
     prefix: ${JWT_PREFIX:Bearer}
 
 post:

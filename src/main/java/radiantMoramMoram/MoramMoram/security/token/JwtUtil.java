@@ -9,8 +9,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import radiantMoramMoram.MoramMoram.error.TokenErrorCode;
 import radiantMoramMoram.MoramMoram.error.TokenException;
-import radiantMoramMoram.MoramMoram.exception.ExpiredTokenException;
-import radiantMoramMoram.MoramMoram.exception.InvalidTokenException;
 import radiantMoramMoram.MoramMoram.payload.request.user.TokenInfoRequest;
 import radiantMoramMoram.MoramMoram.payload.response.token.TokenResponse;
 import radiantMoramMoram.MoramMoram.security.auth.Authority;
@@ -19,7 +17,6 @@ import radiantMoramMoram.MoramMoram.util.RedisUtil;
 
 import java.security.Key;
 import java.util.Date;
-
 @RequiredArgsConstructor
 @Log
 @Component
@@ -86,10 +83,11 @@ public class JwtUtil {
     }
 
 
-    public String getUserIdFromJwtToken(String accessToken){
+    public String getUserIdFromJwtToken(String accessToken) {
         return (String) Jwts.parserBuilder().setSigningKey(getSigningKey(SECRET_KEY))
                 .build()
                 .parseClaimsJws(accessToken)
                 .getBody().get("user");
     }
+
 }
