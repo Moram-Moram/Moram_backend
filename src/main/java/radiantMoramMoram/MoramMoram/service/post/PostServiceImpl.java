@@ -16,7 +16,7 @@ import radiantMoramMoram.MoramMoram.exception.UserNotFoundException;
 import radiantMoramMoram.MoramMoram.payload.request.post.LikePostRequest;
 import radiantMoramMoram.MoramMoram.payload.request.post.ReportPostRequest;
 import radiantMoramMoram.MoramMoram.payload.request.post.WritePostRequest;
-import radiantMoramMoram.MoramMoram.payload.response.GetPostResponse;
+import radiantMoramMoram.MoramMoram.payload.response.post.GetPostResponse;
 import radiantMoramMoram.MoramMoram.repository.UserRepository;
 import radiantMoramMoram.MoramMoram.repository.post.CategoryRepository;
 import radiantMoramMoram.MoramMoram.repository.post.ImageRepository;
@@ -40,7 +40,7 @@ public class PostServiceImpl implements PostService {
     private final ImageRepository imageRepository;
     private final LikePostRepository likePostRepository;
 
-    @Value("${post.image.path}")
+    @Value("${image.upload.dir}")
     private String imagePath;
 
     @SneakyThrows
@@ -99,7 +99,7 @@ public class PostServiceImpl implements PostService {
         return GetPostResponse.builder()
                 .title(post.getTitle())
                 .content(post.getContent())
-                .user(post.getUser())
+                .userId(post.getUser().getId())
                 .image(fileNames)
                 .build();
     }
@@ -170,7 +170,7 @@ public class PostServiceImpl implements PostService {
                 .postId(post.get().getId())
                 .title(post.get().getTitle())
                 .content(post.get().getContent())
-                .user(post.get().getUser())
+                .userId(post.get().getUser().getId())
                 .image(fileNames)
                 .build();
     }

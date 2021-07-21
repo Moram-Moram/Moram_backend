@@ -5,7 +5,7 @@ server:
 
 spring:
   datasource:
-    url: ${DATABASE_URL:}
+    url: ${DATABASE_URL:jdbc:mysql://moram:morammoram12@moram-moram.cwjdlhpngx8e.us-east-2.rds.amazonaws.com:3306/moram_moram}
     driver-class-name: com.mysql.cj.jdbc.Driver
   redis:
     host: ${REDIS_HOST:localhost}
