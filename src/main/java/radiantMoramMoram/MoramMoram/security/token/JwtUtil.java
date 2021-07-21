@@ -113,5 +113,17 @@ public class JwtUtil {
                 .getBody();
     }
 
+    public String reissuanceAccessToken(String refreshToken){
+        String userId = redisUtil.getData(refreshToken);
+
+        if(userId==null){
+            throw new TokenException(TokenErrorCode.TOKEN_EXPIRED);
+        }
+
+        return generateToken(TokenInfoRequest.builder()
+                .id(userId)
+                .role(Authority.valueOf(getUserRoleFromJwtToken(refreshToken)))
+                .build());
+    }
 
 }
