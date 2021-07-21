@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import radiantMoramMoram.MoramMoram.error.TokenErrorCode;
 import radiantMoramMoram.MoramMoram.error.TokenException;
+import radiantMoramMoram.MoramMoram.exception.InvalidTokenException;
 import radiantMoramMoram.MoramMoram.payload.request.user.TokenInfoRequest;
 import radiantMoramMoram.MoramMoram.payload.response.token.TokenResponse;
 import radiantMoramMoram.MoramMoram.security.auth.Authority;
@@ -28,6 +29,9 @@ public class JwtUtil {
     private final CustomUserDetailService userDetailsService;
     private final RedisUtil redisUtil;
 
+    String accessToken = "access";
+    String refreshToken = "refresh";
+
     @Value("${auth.jwt.secret}")
     private String SECRET_KEY;
 
@@ -37,20 +41,21 @@ public class JwtUtil {
 
     // create access token
     public String generateToken(TokenInfoRequest user){
-        return doGenerateToken(user.getId(), user.getRole(), TOKEN_VALIDATION_SECOND);
+        return doGenerateToken(user.getId(), user.getRole(), TOKEN_VALIDATION_SECOND, accessToken);
     }
 
     // create refresh token - or user null
     public String generateRefreshToken(TokenInfoRequest user){
-        String rToken = doGenerateToken(user.getId(), user.getRole(), REFRESH_TOKEN_VALIDATION_SECOND);
+        String rToken = doGenerateToken(user.getId(), user.getRole(), REFRESH_TOKEN_VALIDATION_SECOND, refreshToken);
         redisUtil.setData(user.getId(), rToken);
         return rToken;
     }
 
-    private String doGenerateToken(String userId, Authority role, long expireTime){
+    private String doGenerateToken(String userId, Authority role, long expireTime, String type){
         Claims claims = Jwts.claims();
         claims.put("user", userId);
         claims.put("role", role);
+        claims.put("type", type);
 
         return Jwts.builder()
                 .setClaims(claims)
@@ -85,9 +90,23 @@ public class JwtUtil {
 
 
     public String getUserIdFromJwtToken(String accessToken){
-        return (String) Jwts.parserBuilder().setSigningKey(getSigningKey(SECRET_KEY))
-                .build()
-                .parseClaimsJws(accessToken)
-                .getBody().get("user");
+        return (String) getBodyFromToken(accessToken)
+                .get("user");
     }
+    public boolean checkTypeFromToken(String token){
+        try {
+            return getBodyFromToken(token).get("type").equals("refresh");
+        } catch (Exception e){
+            throw new InvalidTokenException();
+        }
+    }
+
+    private Claims getBodyFromToken(String token){
+        return Jwts.parserBuilder().setSigningKey(getSigningKey(SECRET_KEY))
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
+
 }
