@@ -7,10 +7,13 @@ import radiantMoramMoram.MoramMoram.entity.user.User;
 import radiantMoramMoram.MoramMoram.entity.user.UserBuilder;
 import radiantMoramMoram.MoramMoram.error.BasicException;
 import radiantMoramMoram.MoramMoram.error.ErrorCode;
+import radiantMoramMoram.MoramMoram.error.TokenErrorCode;
+import radiantMoramMoram.MoramMoram.error.TokenException;
 import radiantMoramMoram.MoramMoram.exception.UserAlreadyExistsException;
 import radiantMoramMoram.MoramMoram.payload.request.user.LoginRequest;
 import radiantMoramMoram.MoramMoram.payload.request.user.SignUpRequest;
 import radiantMoramMoram.MoramMoram.payload.request.user.TokenInfoRequest;
+import radiantMoramMoram.MoramMoram.payload.response.token.AccessTokenResponse;
 import radiantMoramMoram.MoramMoram.repository.UserRepository;
 import radiantMoramMoram.MoramMoram.security.token.JwtUtil;
 import radiantMoramMoram.MoramMoram.payload.response.token.TokenResponse;
@@ -27,6 +30,7 @@ public class UserServiceImpl implements UserService {
 
     private final JwtUtil jwtUtil;
 
+    @Override
     public void join(SignUpRequest userReq){
         User user = new UserBuilder()
                 .setId(userReq.getId())
@@ -37,6 +41,7 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
+    @Override
     public TokenResponse login(LoginRequest loginUser){
         User user = userRepository.findByIdAndPassword(loginUser.getId(), pwEncrypt(loginUser.getPw()));
 
@@ -64,4 +69,11 @@ public class UserServiceImpl implements UserService {
                 });
     }
 
+
+    public AccessTokenResponse tokenRefresh(String token){
+        if(!jwtUtil.checkTypeFromToken(token)){
+            throw new TokenException(TokenErrorCode.INVALID_TOKEN);
+        }
+        return new AccessTokenResponse(jwtUtil.reissuanceAccessToken(token));
+    }
 }

@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import radiantMoramMoram.MoramMoram.error.TokenErrorCode;
 import radiantMoramMoram.MoramMoram.error.TokenException;
+import radiantMoramMoram.MoramMoram.exception.InvalidTokenException;
 import radiantMoramMoram.MoramMoram.payload.request.user.TokenInfoRequest;
 import radiantMoramMoram.MoramMoram.payload.response.token.TokenResponse;
 import radiantMoramMoram.MoramMoram.security.auth.Authority;
@@ -17,6 +18,7 @@ import radiantMoramMoram.MoramMoram.util.RedisUtil;
 
 import java.security.Key;
 import java.util.Date;
+
 @RequiredArgsConstructor
 @Log
 @Component
@@ -27,6 +29,9 @@ public class JwtUtil {
     private final CustomUserDetailService userDetailsService;
     private final RedisUtil redisUtil;
 
+    String accessToken = "access";
+    String refreshToken = "refresh";
+
     @Value("${auth.jwt.secret}")
     private String SECRET_KEY;
 
@@ -36,20 +41,21 @@ public class JwtUtil {
 
     // create access token
     public String generateToken(TokenInfoRequest user){
-        return doGenerateToken(user.getId(), user.getRole(), TOKEN_VALIDATION_SECOND);
+        return doGenerateToken(user.getId(), user.getRole(), TOKEN_VALIDATION_SECOND, accessToken);
     }
 
     // create refresh token - or user null
     public String generateRefreshToken(TokenInfoRequest user){
-        String rToken = doGenerateToken(user.getId(), user.getRole(), REFRESH_TOKEN_VALIDATION_SECOND);
-        redisUtil.setData(user.getId(), rToken);
+        String rToken = doGenerateToken(user.getId(), user.getRole(), REFRESH_TOKEN_VALIDATION_SECOND, refreshToken);
+        redisUtil.setData(rToken, user.getId());
         return rToken;
     }
 
-    private String doGenerateToken(String userId, Authority role, long expireTime){
+    private String doGenerateToken(String userId, Authority role, long expireTime, String type){
         Claims claims = Jwts.claims();
         claims.put("user", userId);
         claims.put("role", role);
+        claims.put("type", type);
 
         return Jwts.builder()
                 .setClaims(claims)
@@ -73,7 +79,7 @@ public class JwtUtil {
             throw new TokenException(TokenErrorCode.TOKEN_EXPIRED);
         } catch (UnsupportedJwtException e){
             throw new TokenException(TokenErrorCode.UNSUPPORTED_TOKEN);
-        } catch (IllegalArgumentException e){
+        } catch (Exception e){
             throw new TokenException(TokenErrorCode.INVALID_TOKEN);
         }
     }
@@ -83,11 +89,41 @@ public class JwtUtil {
     }
 
 
-    public String getUserIdFromJwtToken(String accessToken) {
-        return (String) Jwts.parserBuilder().setSigningKey(getSigningKey(SECRET_KEY))
+    public String getUserIdFromJwtToken(String accessToken){
+        return (String) getBodyFromToken(accessToken)
+                .get("user");
+    }
+    public String getUserRoleFromJwtToken(String token){
+        return (String) getBodyFromToken(token)
+                .get("role");
+    }
+
+    public boolean checkTypeFromToken(String token){
+        try {
+            return getBodyFromToken(token).get("type").equals("refresh");
+        } catch (Exception e){
+            throw new InvalidTokenException();
+        }
+    }
+
+    private Claims getBodyFromToken(String token){
+        return Jwts.parserBuilder().setSigningKey(getSigningKey(SECRET_KEY))
                 .build()
-                .parseClaimsJws(accessToken)
-                .getBody().get("user");
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
+    public String reissuanceAccessToken(String refreshToken){
+        String userId = redisUtil.getData(refreshToken);
+
+        if(userId==null){
+            throw new TokenException(TokenErrorCode.TOKEN_EXPIRED);
+        }
+
+        return generateToken(TokenInfoRequest.builder()
+                .id(userId)
+                .role(Authority.valueOf(getUserRoleFromJwtToken(refreshToken)))
+                .build());
     }
 
 }
