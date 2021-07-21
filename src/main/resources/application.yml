@@ -5,12 +5,12 @@ server:
 
 spring:
   datasource:
-    url: ${MYSQL_URL}
+    url: ${MYSQL_URL:}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   redis:
     host: ${REDIS_HOST:localhost}
-    port: ${REDIS_PORT:}
+    port: ${REDIS_PORT:6379}
 
 auth:
   jwt:
