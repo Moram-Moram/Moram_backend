@@ -68,4 +68,9 @@ public class ReportServiceImpl implements ReportService {
                 .image(fileNames)
                 .build();
     }
+
+    @Override
+    public void deletePost(int postId){
+        reportRepository.deleteById(postId);
+    }
 }

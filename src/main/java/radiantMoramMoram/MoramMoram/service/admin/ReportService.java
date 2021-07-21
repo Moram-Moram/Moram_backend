@@ -10,4 +10,6 @@ public interface ReportService {
 
     ReportPostResponse getReportPost(int id);
 
+    void deletePost(int postId);
+
 }
