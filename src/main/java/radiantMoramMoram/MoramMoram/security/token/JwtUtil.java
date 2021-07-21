@@ -47,7 +47,7 @@ public class JwtUtil {
     // create refresh token - or user null
     public String generateRefreshToken(TokenInfoRequest user){
         String rToken = doGenerateToken(user.getId(), user.getRole(), REFRESH_TOKEN_VALIDATION_SECOND, refreshToken);
-        redisUtil.setData(user.getId(), rToken);
+        redisUtil.setData(rToken, user.getId());
         return rToken;
     }
 
@@ -79,7 +79,7 @@ public class JwtUtil {
             throw new TokenException(TokenErrorCode.TOKEN_EXPIRED);
         } catch (UnsupportedJwtException e){
             throw new TokenException(TokenErrorCode.UNSUPPORTED_TOKEN);
-        } catch (IllegalArgumentException e){
+        } catch (Exception e){
             throw new TokenException(TokenErrorCode.INVALID_TOKEN);
         }
     }
@@ -93,6 +93,11 @@ public class JwtUtil {
         return (String) getBodyFromToken(accessToken)
                 .get("user");
     }
+    public String getUserRoleFromJwtToken(String token){
+        return (String) getBodyFromToken(token)
+                .get("role");
+    }
+
     public boolean checkTypeFromToken(String token){
         try {
             return getBodyFromToken(token).get("type").equals("refresh");
