@@ -1,5 +1,5 @@
 server:
-  port: 8000
+  port: 8008
   jackson:
     property-naming-strategy: SNAKE_CASE
 
@@ -11,14 +11,19 @@ spring:
   redis:
     host: ${REDIS_HOST:localhost}
     port: ${REDIS_PORT:6379}
-
+  jpa:
+    show-sql: true
 auth:
   jwt:
-    secret: ${JWT_SECRET_KEY:dGVzdA==}
+    secret: ${JWT_SECRET_KEY:}
     exp:
       access: ${JWT_ACCESS_EXP:3600}
       refresh: ${JWT_REFRESH_EXP:3600}
     header:
       access: ${JWT_HEADER:Authorization}
-      refresh: ${JWT_REFRESH_HEADER:X-Refresh-Token}
+      refresh: ${JWT_REFRESH_HEADER:Refresh-Token}
     prefix: ${JWT_PREFIX:Bearer}
+
+post:
+  image:
+    path: ${IMAGE_PATH:/}
