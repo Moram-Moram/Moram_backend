@@ -27,8 +27,8 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
                     .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .antMatchers("/*").permitAll()
-                .antMatchers("/admin/").hasRole("ADMIN")
+                .antMatchers("/**").permitAll()
+                .antMatchers("/admin/report/*").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().disable();
