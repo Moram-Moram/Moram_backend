@@ -15,7 +15,7 @@ public class ReportController {
     private final ReportService reportService;
 
     @GetMapping
-    public ReportListResponse getReportList(final Pageable pageable) {
+    public ReportListResponse getReportList(@PathVariable Pageable pageable) {
         return reportService.getReportList(pageable);
     }
 
