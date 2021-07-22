@@ -11,12 +11,11 @@ import radiantMoramMoram.MoramMoram.service.admin.AdminService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/admin/auth")
 public class AuthController {
 
-    private AdminService adminService;
+    private final AdminService adminService;
 
-    @PostMapping
+    @PostMapping("/admin/auth")
     public AdminSignInResponse signIn(@RequestBody AdminSignInRequest adminSignInRequest) {
         return adminService.adminSignIn(adminSignInRequest);
     }
