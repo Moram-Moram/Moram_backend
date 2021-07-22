@@ -10,15 +10,17 @@ import java.time.LocalDate;
 @ToString
 @Builder
 public class PostListResponse {
+
     private Integer postId;
 
     private String title;
 
     private String content;
 
-    private String writer; // userNickname
+    private String writer;
 
     private String image;
 
     private LocalDate date;
+
 }

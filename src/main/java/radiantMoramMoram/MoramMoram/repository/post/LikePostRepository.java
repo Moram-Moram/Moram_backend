@@ -15,8 +15,6 @@ public interface LikePostRepository extends JpaRepository<LikePost, LikePostKey>
 
     void deleteByPostAndUser(Post post, User user);
 
-    Post findByPost(Post post);
-
     @Query(value = "select count(*) from moram_moram.tbl_like where post_id = :postId", nativeQuery = true)
     int postLikeNum(int postId);
 

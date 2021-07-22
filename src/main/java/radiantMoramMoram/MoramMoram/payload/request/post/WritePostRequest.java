@@ -14,8 +14,6 @@ import radiantMoramMoram.MoramMoram.entity.user.User;
 @AllArgsConstructor
 public class WritePostRequest {
 
-    private int post;
-
     private String title;
 
     private String content;

@@ -22,6 +22,8 @@ public class GetPostResponse {
 
     private String writer;
 
+    private String user;
+
     private LocalDate date;
 
     private List<String> image;
