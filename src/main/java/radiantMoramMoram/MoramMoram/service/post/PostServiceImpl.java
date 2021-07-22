@@ -96,7 +96,7 @@ public class PostServiceImpl implements PostService {
         User user = userRepository.findById(jwtUtil.getUserIdFromJwtToken(token))
                 .orElseThrow(UserNotFoundException::new);
 
-        Post likePost = likePostRepository.findByPost(post);
+        int likePostNum = likePostRepository.postLikeNum(postId);
 
         List<String> fileNames = imageRepository.findByPostOrderById(postId)
                 .stream().map(Image::getFileName)
@@ -107,7 +107,7 @@ public class PostServiceImpl implements PostService {
                 .content(post.getContent())
                 .user(user.getId())
                 .image(fileNames)
-                .like(likePost.getId())
+                .likeNum(likePostNum)
                 .build();
     }
 
