@@ -9,7 +9,8 @@ import radiantMoramMoram.MoramMoram.payload.response.post.GetPostResponse;
 import radiantMoramMoram.MoramMoram.service.post.PostService;
 
 @RequiredArgsConstructor
-@RestController("/post")
+@RestController
+@RequestMapping("/post")
 public class PostController {
 
     private final PostService postService;
@@ -23,15 +24,14 @@ public class PostController {
     };
 
     @GetMapping("/{postId}")
-    public GetPostResponse getPost(@RequestBody Integer postId,
-                                   @RequestHeader("Authorization") String token) {
+    public GetPostResponse getPost(Integer postId, @RequestHeader("Authorization") String token) {
 
         return postService.getPost(postId, token);
 
     };
 
     @DeleteMapping("/{postId}")
-    public void deletePost(@RequestBody Integer postId) {
+    public void deletePost(Integer postId) {
 
         postService.deletePost(postId);
 
