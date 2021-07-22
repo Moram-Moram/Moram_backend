@@ -22,11 +22,7 @@ public class GetPostResponse {
 
     private String writer;
 
-<<<<<<< HEAD
     private String user;
-=======
-    private LocalDate date;
->>>>>>> develop
 
     private LocalDate date;
 
