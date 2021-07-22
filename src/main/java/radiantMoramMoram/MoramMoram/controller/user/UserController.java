@@ -30,5 +30,5 @@ public class UserController {
     public void duplicateCheck(@RequestBody SignUpRequest signUpRequest) {
         userService.duplicateCheck(signUpRequest);
     }
-    
+
 }
