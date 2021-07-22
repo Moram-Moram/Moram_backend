@@ -2,10 +2,16 @@ server:
   port: 8088
   jackson:
     property-naming-strategy: SNAKE_CASE
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
+      force-response: true
+      force-request: true
 
 spring:
   datasource:
-    url: ${DATABASE_URL:jdbc:mysql://moram:morammoram12@moram-moram.cwjdlhpngx8e.us-east-2.rds.amazonaws.com:3306/moram_moram}
+    url: ${DATABASE_HOST:}
     driver-class-name: com.mysql.cj.jdbc.Driver
   redis:
     host: ${REDIS_HOST:localhost}
