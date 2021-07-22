@@ -1,7 +1,6 @@
 package radiantMoramMoram.MoramMoram.service.user;
 
 import radiantMoramMoram.MoramMoram.entity.user.User;
-import radiantMoramMoram.MoramMoram.payload.request.mypage.DeleteUserRequest;
 import radiantMoramMoram.MoramMoram.payload.request.mypage.UpdateUserRequest;
 import radiantMoramMoram.MoramMoram.payload.request.user.LoginRequest;
 import radiantMoramMoram.MoramMoram.payload.request.user.SignUpRequest;
@@ -19,5 +18,7 @@ public interface UserService {
     void updateUser(UpdateUserRequest updateUserRequest, User user);
 
     MyPageResponse getMyPage(String userId);
+
+    void duplicateCheck(SignUpRequest signUpRequest);
 
 }
