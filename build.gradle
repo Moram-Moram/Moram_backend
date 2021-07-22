@@ -23,8 +23,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'io.jsonwebtoken:jjwt:0.9.1'
-	compile group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'
+	//implementation 'io.jsonwebtoken:jjwt:0.9.1'
+	//compile group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'mysql:mysql-connector-java'
@@ -33,6 +33,23 @@ dependencies {
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
+
+
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
+
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+	compile('io.jsonwebtoken:jjwt-api:0.11.1')
+	runtime('io.jsonwebtoken:jjwt-impl:0.11.1', 'io.jsonwebtoken:jjwt-jackson:0.11.1')
+
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+
+	compile('org.springframework.boot:spring-boot-starter-data-redis')
+	compile group: 'it.ozimov', name: 'embedded-redis', version: '0.7.2'
+
+	implementation 'com.h2database:h2'
+
 }
 
 test {

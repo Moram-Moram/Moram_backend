@@ -5,11 +5,13 @@ import org.springframework.web.bind.annotation.*;
 import radiantMoramMoram.MoramMoram.payload.request.post.LikePostRequest;
 import radiantMoramMoram.MoramMoram.payload.request.post.ReportPostRequest;
 import radiantMoramMoram.MoramMoram.payload.request.post.WritePostRequest;
-import radiantMoramMoram.MoramMoram.payload.response.GetPostResponse;
+import radiantMoramMoram.MoramMoram.payload.response.post.GetPostResponse;
+import radiantMoramMoram.MoramMoram.payload.response.post.PostsResponse;
 import radiantMoramMoram.MoramMoram.service.post.PostService;
 
 @RequiredArgsConstructor
-@RestController("/post")
+@RestController
+@RequestMapping("/post")
 public class PostController {
 
     private final PostService postService;
@@ -26,12 +28,12 @@ public class PostController {
     public GetPostResponse getPost(@PathVariable Integer postId,
                                    @RequestHeader("Authorization") String token) {
 
-        return postService.getPost(postId);
+        return postService.getPost(postId, token);
 
     };
 
     @DeleteMapping("/{postId}")
-    public void deletePost(@RequestBody Integer postId) {
+    public void deletePost(Integer postId) {
 
         postService.deletePost(postId);
 
@@ -51,4 +53,13 @@ public class PostController {
 
     };
 
+    @GetMapping("/random/{click}")
+    public GetPostResponse randomPost(@PathVariable("click") int click){
+        return postService.randomPost(click);
+    }
+
+    @GetMapping("/list/{category}")
+    public PostsResponse postList(@PathVariable("category") String category){
+        return postService.getPostList(category);
+    }
 }

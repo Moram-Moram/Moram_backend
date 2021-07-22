@@ -1,18 +1,15 @@
 package radiantMoramMoram.MoramMoram.payload.response.post;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Getter
+@ToString
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class GetPostResponse {
+public class PostListResponse {
 
     private Integer postId;
 
@@ -22,12 +19,8 @@ public class GetPostResponse {
 
     private String writer;
 
-    private String user;
+    private String image;
 
     private LocalDate date;
-
-    private List<String> image;
-
-    private Integer likeNum;
 
 }

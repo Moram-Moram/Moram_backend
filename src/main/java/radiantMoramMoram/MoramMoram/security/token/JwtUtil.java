@@ -2,32 +2,35 @@ package radiantMoramMoram.MoramMoram.security.token;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-import radiantMoramMoram.MoramMoram.exception.ExpiredTokenException;
+import radiantMoramMoram.MoramMoram.error.TokenErrorCode;
+import radiantMoramMoram.MoramMoram.error.TokenException;
 import radiantMoramMoram.MoramMoram.exception.InvalidTokenException;
 import radiantMoramMoram.MoramMoram.payload.request.user.TokenInfoRequest;
 import radiantMoramMoram.MoramMoram.payload.response.token.TokenResponse;
 import radiantMoramMoram.MoramMoram.security.auth.Authority;
+import radiantMoramMoram.MoramMoram.service.user.CustomUserDetailService;
 import radiantMoramMoram.MoramMoram.util.RedisUtil;
 
 import java.security.Key;
 import java.util.Date;
 
+@RequiredArgsConstructor
 @Log
 @Component
 public class JwtUtil {
-    private static final String AUTHORITIES_KEY = "auth";
-
-    public final static long TOKEN_VALIDATION_SECOND = 1000L*10;
+    public final static long TOKEN_VALIDATION_SECOND = 60*60*500;
     public final static long REFRESH_TOKEN_VALIDATION_SECOND  = 1000L*60*24*2;
 
-    @Autowired
-    RedisUtil redisUtil;
+    private final CustomUserDetailService userDetailsService;
+    private final RedisUtil redisUtil;
 
-
+    String accessToken = "access";
+    String refreshToken = "refresh";
 
     @Value("${auth.jwt.secret}")
     private String SECRET_KEY;
@@ -38,44 +41,28 @@ public class JwtUtil {
 
     // create access token
     public String generateToken(TokenInfoRequest user){
-        return doGenerateToken(user.getId(), user.getRole(), TOKEN_VALIDATION_SECOND);
+        return doGenerateToken(user.getId(), user.getRole(), TOKEN_VALIDATION_SECOND, accessToken);
     }
 
     // create refresh token - or user null
     public String generateRefreshToken(TokenInfoRequest user){
-        String rToken = doGenerateToken(user.getId(), user.getRole(), REFRESH_TOKEN_VALIDATION_SECOND);
-        redisUtil.setData(user.getId(), rToken);
+        String rToken = doGenerateToken(user.getId(), user.getRole(), REFRESH_TOKEN_VALIDATION_SECOND, refreshToken);
+        redisUtil.setData(rToken, user.getId());
         return rToken;
     }
 
-    private String doGenerateToken(String userId, Authority role, long expireTime){
+    private String doGenerateToken(String userId, Authority role, long expireTime, String type){
         Claims claims = Jwts.claims();
         claims.put("user", userId);
         claims.put("role", role);
+        claims.put("type", type);
 
-        String jwt = Jwts.builder()
+        return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis()+expireTime))
                 .signWith(getSigningKey(SECRET_KEY), SignatureAlgorithm.HS256)
                 .compact();
-
-
-        return jwt;
-    }
-
-    public String parseToken(String token) throws ExpiredJwtException {
-        String result;
-        try {
-            result = Jwts.parser().setSigningKey(SECRET_KEY.getBytes()).parseClaimsJws(token).getBody().getSubject();
-            if(!Jwts.parser().setSigningKey(SECRET_KEY.getBytes()).parseClaimsJws(token).getBody().get("type").equals("access_token"))
-                throw new InvalidTokenException();
-        } catch (ExpiredJwtException e) {
-            throw new ExpiredTokenException();
-        } catch (MalformedJwtException e) {
-            throw new InvalidTokenException();
-        }
-        return token;
     }
 
     private Key getSigningKey(String secretKey){
@@ -83,20 +70,60 @@ public class JwtUtil {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public boolean validateToken(String token){
+    public void validateToken(String token){
         try{
-            Jwts.parserBuilder().setSigningKey(SECRET_KEY).build().parseClaimsJws(token);
-            return true;
+            Jwts.parserBuilder().setSigningKey(getSigningKey(SECRET_KEY)).build().parseClaimsJws(token);
         } catch (SecurityException | MalformedJwtException e){
-            log.info("잘못된 jwt 서명입니다.");
+            throw new TokenException(TokenErrorCode.INVALID_SIGNATURE);
         } catch (ExpiredJwtException e){
-            log.info("만료된 jwt 토큰입니다.");
+            throw new TokenException(TokenErrorCode.TOKEN_EXPIRED);
         } catch (UnsupportedJwtException e){
-            log.info("지원되지 않는 jwt 토큰입니다.");
-        } catch (IllegalArgumentException e){
-            log.info("jwt 토큰이 잘못되었습니다.");
+            throw new TokenException(TokenErrorCode.UNSUPPORTED_TOKEN);
+        } catch (Exception e){
+            throw new TokenException(TokenErrorCode.INVALID_TOKEN);
         }
-        return false;
-
     }
+
+    public UserDetails userAuthReturn(String id){
+        return userDetailsService.loadUserByUsername(id);
+    }
+
+
+    public String getUserIdFromJwtToken(String accessToken){
+        return (String) getBodyFromToken(accessToken)
+                .get("user");
+    }
+    public String getUserRoleFromJwtToken(String token){
+        return (String) getBodyFromToken(token)
+                .get("role");
+    }
+
+    public boolean checkTypeFromToken(String token){
+        try {
+            return getBodyFromToken(token).get("type").equals("refresh");
+        } catch (Exception e){
+            throw new InvalidTokenException();
+        }
+    }
+
+    private Claims getBodyFromToken(String token){
+        return Jwts.parserBuilder().setSigningKey(getSigningKey(SECRET_KEY))
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
+    public String reissuanceAccessToken(String refreshToken){
+        String userId = redisUtil.getData(refreshToken);
+
+        if(userId==null){
+            throw new TokenException(TokenErrorCode.TOKEN_EXPIRED);
+        }
+
+        return generateToken(TokenInfoRequest.builder()
+                .id(userId)
+                .role(Authority.valueOf(getUserRoleFromJwtToken(refreshToken)))
+                .build());
+    }
+
 }

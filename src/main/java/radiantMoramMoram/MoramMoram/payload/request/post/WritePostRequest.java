@@ -14,8 +14,6 @@ import radiantMoramMoram.MoramMoram.entity.user.User;
 @AllArgsConstructor
 public class WritePostRequest {
 
-    private int post;
-
     private String title;
 
     private String content;
@@ -25,5 +23,4 @@ public class WritePostRequest {
     private MultipartFile[] image;
 
     private String[] category;
-
 }

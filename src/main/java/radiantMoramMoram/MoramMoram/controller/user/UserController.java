@@ -1,14 +1,19 @@
 package radiantMoramMoram.MoramMoram.controller.user;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import radiantMoramMoram.MoramMoram.entity.user.User;
+import radiantMoramMoram.MoramMoram.payload.request.mypage.UpdateUserRequest;
 import radiantMoramMoram.MoramMoram.payload.request.user.LoginRequest;
 import radiantMoramMoram.MoramMoram.payload.request.user.SignUpRequest;
+import radiantMoramMoram.MoramMoram.payload.response.token.AccessTokenResponse;
 import radiantMoramMoram.MoramMoram.payload.response.token.TokenResponse;
 import radiantMoramMoram.MoramMoram.service.user.UserServiceImpl;
+
 
 @RequiredArgsConstructor
 @RestController
@@ -17,8 +22,9 @@ public class UserController {
     private final UserServiceImpl userService;
 
     @PostMapping("/user")
-    public void join(@RequestBody SignUpRequest user){
+    public ResponseEntity<HttpStatus> join(@Validated @RequestBody SignUpRequest user){
         userService.join(user);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PostMapping("/auth")
@@ -26,9 +32,20 @@ public class UserController {
         return userService.login(fUser);
     }
 
-    @PutMapping("/user")
-    public void duplicateCheck(@RequestBody SignUpRequest signUpRequest) {
-        userService.duplicateCheck(signUpRequest);
+    @PutMapping("/token")
+    public AccessTokenResponse tokenReissuance(@RequestHeader(name = "Refresh-Token") String token){
+        return userService.tokenRefresh(token);
+    }
+
+    @DeleteMapping("/user/{userId}")
+    public void deleteUser(@PathVariable String userId) {
+        userService.deleteUser(userId);
+    }
+
+    @PutMapping("/user/{userId}/update")
+    public void updateUser(@RequestBody UpdateUserRequest updateUserRequest,
+                           @AuthenticationPrincipal User user) {
+        userService.updateUser(updateUserRequest, user);
     }
 
 }
