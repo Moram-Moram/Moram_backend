@@ -23,7 +23,8 @@ public class PostController {
     };
 
     @GetMapping("/{postId}")
-    public GetPostResponse getPost(@RequestBody Integer postId) {
+    public GetPostResponse getPost(@PathVariable Integer postId,
+                                   @RequestHeader("Authorization") String token) {
 
         return postService.getPost(postId);
 
