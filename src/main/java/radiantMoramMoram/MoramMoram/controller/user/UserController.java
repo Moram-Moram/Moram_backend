@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import radiantMoramMoram.MoramMoram.payload.request.user.LoginRequest;
 import radiantMoramMoram.MoramMoram.payload.request.user.SignUpRequest;
 import radiantMoramMoram.MoramMoram.payload.response.token.TokenResponse;
@@ -24,4 +25,10 @@ public class UserController {
     public TokenResponse login(@RequestBody LoginRequest fUser){
         return userService.login(fUser);
     }
+
+    @PutMapping("/user")
+    public void duplicateCheck(@RequestBody SignUpRequest signUpRequest) {
+        userService.duplicateCheck(signUpRequest);
+    }
+    
 }
