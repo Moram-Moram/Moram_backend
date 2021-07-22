@@ -12,6 +12,7 @@ import radiantMoramMoram.MoramMoram.payload.response.admin.ReportPostResponse;
 import radiantMoramMoram.MoramMoram.payload.response.admin.ReportResponse;
 import radiantMoramMoram.MoramMoram.repository.admin.ReportRepository;
 import radiantMoramMoram.MoramMoram.repository.post.ImageRepository;
+import radiantMoramMoram.MoramMoram.repository.post.PostRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,6 +23,7 @@ public class ReportServiceImpl implements ReportService {
 
     private final ReportRepository reportRepository;
     private final ImageRepository imageRepository;
+    private final PostRepository postRepository;
 
     @Override
     public ReportListResponse getReportList(Pageable pageable) {
