@@ -15,4 +15,6 @@ public class AdminSignInResponse {
 
     private final Long accessTokenExp;
 
+    private final String role;
+
 }
