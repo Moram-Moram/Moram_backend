@@ -15,7 +15,7 @@ public interface UserService {
 
     void join(SignUpRequest user);
 
-    //TokenResponse login(LoginRequest user);
+    TokenResponse login(LoginRequest user);
 
     void deleteUser(String userId);
 

@@ -43,28 +43,28 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
-//    @Override
-//    public TokenResponse login(LoginRequest loginUser){
-//        User user = userRepository.findByIdAndPassword(loginUser.getId(), pwEncrypt(loginUser.getPw()));
-//
-//        if(user==null){
-//            throw new BasicException(ErrorCode.USER_NOT_FOUND);
-//        }
-//
-//        TokenInfoRequest tokenInfoReq = TokenInfoRequest.builder()
-//                .role(user.getRole())
-//                .id(user.getId())
-//                .build();
-//
-//        return jwtUtil.createToken(tokenInfoReq);
-//    }
-//
-//    public AccessTokenResponse tokenRefresh(String token){
-//        if(!jwtUtil.checkTypeFromToken(token)){
-//            throw new TokenException(TokenErrorCode.INVALID_TOKEN);
-//        }
-//        return new AccessTokenResponse(jwtUtil.reissuanceAccessToken(token));
-//    }
+    @Override
+    public TokenResponse login(LoginRequest loginUser){
+        User user = userRepository.findByIdAndPassword(loginUser.getId(), pwEncrypt(loginUser.getPw()));
+
+        if(user==null){
+            throw new BasicException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        TokenInfoRequest tokenInfoReq = TokenInfoRequest.builder()
+                .role(user.getRole())
+                .id(user.getId())
+                .build();
+
+        return jwtUtil.createToken(tokenInfoReq);
+    }
+
+    public AccessTokenResponse tokenRefresh(String token){
+        if(!jwtUtil.checkTypeFromToken(token)){
+            throw new TokenException(TokenErrorCode.INVALID_TOKEN);
+        }
+        return new AccessTokenResponse(jwtUtil.reissuanceAccessToken(token));
+    }
 
     @Override
     @Transactional
