@@ -111,11 +111,7 @@ public class PostServiceImpl implements PostService {
                 .content(post.getContent())
                 .writer(user.getNickname())
                 .image(fileNames)
-<<<<<<< HEAD
                 .likeNum(likePostNum)
-=======
-                .likeNum(likePost.getId())
->>>>>>> develop
                 .build();
     }
 
