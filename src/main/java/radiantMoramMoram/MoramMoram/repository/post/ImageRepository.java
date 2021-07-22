@@ -12,4 +12,6 @@ public interface ImageRepository extends JpaRepository<Image, Integer> {
 
     List<Image> findByPostOrderById(Post post);
 
+    List<Image> findAllByPost(Post post);
+
 }
