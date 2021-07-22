@@ -22,6 +22,11 @@ import radiantMoramMoram.MoramMoram.exception.PostNotFoundException;
 import radiantMoramMoram.MoramMoram.exception.UserNotFoundException;
 import radiantMoramMoram.MoramMoram.payload.request.post.LikePostRequest;
 import radiantMoramMoram.MoramMoram.payload.request.post.ReportPostRequest;
+<<<<<<< Updated upstream
+=======
+import radiantMoramMoram.MoramMoram.payload.request.post.WritePostRequest;
+import radiantMoramMoram.MoramMoram.payload.response.post.GetPostResponse;
+>>>>>>> Stashed changes
 import radiantMoramMoram.MoramMoram.repository.UserRepository;
 import radiantMoramMoram.MoramMoram.repository.post.CategoryRepository;
 import radiantMoramMoram.MoramMoram.repository.post.ImageRepository;
@@ -30,7 +35,14 @@ import radiantMoramMoram.MoramMoram.security.token.JwtUtil;
 
 import javax.transaction.Transactional;
 import java.io.File;
+<<<<<<< Updated upstream
 import java.util.*;
+=======
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
+import java.util.UUID;
+>>>>>>> Stashed changes
 import java.util.stream.Collectors;
 
 @Service
@@ -103,6 +115,13 @@ public class PostServiceImpl implements PostService {
         int likePostNum = likePostRepository.postLikeNum(postId);
 
         List<String> fileNames = imageRepository.findByPostOrderById(postId)
+
+        User user = userRepository.findById(jwtUtil.getUserIdFromJwtToken(token))
+                .orElseThrow(UserNotFoundException::new);
+
+        int likePostNum = likePostRepository.postLikeNum(postId);
+
+        List<String> fileNames = imageRepository.findAllByPost(post)
                 .stream().map(Image::getFileName)
                 .collect(Collectors.toList());
 
@@ -185,12 +204,17 @@ public class PostServiceImpl implements PostService {
                 .postId(post.getId())
                 .title(post.getTitle())
                 .content(post.getContent())
+<<<<<<< Updated upstream
                 .writer(post.getUser().getNickname())
+=======
+                .user(post.getUser().getNickname())
+>>>>>>> Stashed changes
                 .date(post.getDate())
                 .likeNum(likeNum)
                 .image(fileNames)
                 .build();
     }
+<<<<<<< Updated upstream
 
     @Transactional
     public PostsResponse getPostList(String category){
@@ -211,6 +235,27 @@ public class PostServiceImpl implements PostService {
         for(Post p : posts){
             List<String> fileNames = getFileFromPost(p);
 
+=======
+
+    @Transactional
+    public PostsResponse getPostList(String category){
+
+        List<Integer> postIdList = categoryRepository.categoryPostListReturn(category);
+
+        if(postIdList.isEmpty()){
+            throw new BasicException(ErrorCode.CATEGORY_NOT_FOUND);
+        }
+
+        List<Post> posts = new ArrayList<>();
+        for(int postId : postIdList){
+            posts.add(postRepository.findById(postId).orElseThrow(PostNotFoundException::new));
+        }
+
+        List<PostListResponse> postList = new ArrayList<>();
+
+        for(Post p : posts){
+            List<String> fileNames = getFileFromPost(p);
+>>>>>>> Stashed changes
             postList.add(
                     PostListResponse.builder()
                     .content(p.getContent())
@@ -231,7 +276,11 @@ public class PostServiceImpl implements PostService {
     }
 
     private List<String> getFileFromPost(Post post){
+<<<<<<< Updated upstream
         return imageRepository.findByPostOrderById(post)
+=======
+        return imageRepository.findAllByPost(post)
+>>>>>>> Stashed changes
                 .stream().map(Image::getFileName)
                 .collect(Collectors.toList());
     }
