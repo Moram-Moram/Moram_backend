@@ -8,6 +8,7 @@ import radiantMoramMoram.MoramMoram.exception.AuthorizationFailureException;
 import radiantMoramMoram.MoramMoram.payload.request.admin.AdminSignInRequest;
 import radiantMoramMoram.MoramMoram.payload.response.admin.AdminSignInResponse;
 import radiantMoramMoram.MoramMoram.repository.admin.AdminRepositpry;
+import radiantMoramMoram.MoramMoram.security.auth.Authority;
 import radiantMoramMoram.MoramMoram.security.token.JwtProvider;
 
 @Service
@@ -29,6 +30,7 @@ public class AdminServiceImpl implements AdminService {
                 .accessToken(jwtProvider.generateAccessToken(adminSignInRequest.getId()))
                 .tokenType("access")
                 .accessTokenExp(accessExp)
+                .role(Authority.ADMIN.toString())
                 .build();
     }
 }
