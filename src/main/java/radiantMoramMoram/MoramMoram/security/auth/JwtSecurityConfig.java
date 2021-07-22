@@ -19,19 +19,24 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtUtil jwtUtil;
 
     @Override
-    public void configure(HttpSecurity http) throws  Exception{
+    public void configure(HttpSecurity http) throws  Exception {
         http
-
                 .cors().and()
                 .csrf().disable()
+
                 .sessionManagement()
-                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                    .and()
-                .addFilterBefore(new JwtFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class) //
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .addFilterBefore(new JwtFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .antMatchers("/*").permitAll()
-                .antMatchers("/admin/*").hasRole("ADMIN")
+                .antMatchers("/**").permitAll()
+                .antMatchers("/like/*").hasAnyRole("WATER_DROP", "SCOTCH_MIST", "DRIZZLE", "SHOWER")
+                .antMatchers(HttpMethod.GET, "/user/*", "/user/*/update").hasAnyRole("WATER_DROP", "SCOTCH_MIST", "DRIZZLE", "SHOWER")
+                .antMatchers(HttpMethod.POST, "/comment/*", "/post", "/post/*").hasAnyRole("WATER_DROP", "SCOTCH_MIST", "DRIZZLE", "SHOWER")
+                .antMatchers(HttpMethod.DELETE, "/post/*", "/user/*").hasAnyRole("WATER_DROP", "SCOTCH_MIST", "DRIZZLE", "SHOWER")
+                .antMatchers("/admin/report/**").hasRole("ADMIN")
+                .anyRequest().authenticated()
                 .and()
                 .formLogin().disable();
     }
