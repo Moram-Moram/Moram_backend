@@ -16,6 +16,7 @@ import radiantMoramMoram.MoramMoram.payload.request.mypage.UpdateUserRequest;
 import radiantMoramMoram.MoramMoram.payload.request.user.LoginRequest;
 import radiantMoramMoram.MoramMoram.payload.request.user.SignUpRequest;
 import radiantMoramMoram.MoramMoram.payload.request.user.TokenInfoRequest;
+import radiantMoramMoram.MoramMoram.payload.response.mypage.MyPageResponse;
 import radiantMoramMoram.MoramMoram.payload.response.token.AccessTokenResponse;
 import radiantMoramMoram.MoramMoram.repository.UserRepository;
 import radiantMoramMoram.MoramMoram.security.token.JwtUtil;
@@ -81,5 +82,18 @@ public class UserServiceImpl implements UserService {
         boolean checkBox = updateUserRequest.isCheckBox();
 
         userRepository.save(user.update(password, checkBox));
+    }
+
+    @Override
+    public MyPageResponse getMyPage(String userId) {
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
+
+        return MyPageResponse.builder()
+                .id(user.getId())
+                .name(user.getNickname())
+                .role(user.getRole().toString())
+                .build();
     }
 }

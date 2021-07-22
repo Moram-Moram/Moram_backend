@@ -5,6 +5,7 @@ import radiantMoramMoram.MoramMoram.payload.request.mypage.DeleteUserRequest;
 import radiantMoramMoram.MoramMoram.payload.request.mypage.UpdateUserRequest;
 import radiantMoramMoram.MoramMoram.payload.request.user.LoginRequest;
 import radiantMoramMoram.MoramMoram.payload.request.user.SignUpRequest;
+import radiantMoramMoram.MoramMoram.payload.response.mypage.MyPageResponse;
 import radiantMoramMoram.MoramMoram.payload.response.token.TokenResponse;
 
 public interface UserService {
@@ -16,5 +17,7 @@ public interface UserService {
     void deleteUser(String userId);
 
     void updateUser(UpdateUserRequest updateUserRequest, User user);
+
+    MyPageResponse getMyPage(String userId);
 
 }
