@@ -71,6 +71,13 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     public void deletePost(int postId){
+        if(findByPost(postId)){
+            throw new PostNotFoundException();
+        }
         reportRepository.deleteById(postId);
+    }
+
+    private boolean findByPost(int postId){
+        return reportRepository.findById(postId).isEmpty();
     }
 }
