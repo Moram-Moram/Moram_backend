@@ -15,18 +15,16 @@ public class ReportController {
     private final ReportService reportService;
 
     @GetMapping
-    public ReportListResponse getReportList(Pageable pageable) {
-
+    public ReportListResponse getReportList(@PathVariable Pageable pageable) {
         return reportService.getReportList(pageable);
-
     }
 
     @GetMapping("/postId")
-    public ReportPostResponse getReportPost(int postId) {
+    public ReportPostResponse getReportPost(@PathVariable int postId) {
         return reportService.getReportPost(postId);
     }
 
-    @DeleteMapping("/{postId}")
+    @DeleteMapping("delete/{postId}")
     public void deletePost(@PathVariable int postId){
         reportService.deletePost(postId);
     }
