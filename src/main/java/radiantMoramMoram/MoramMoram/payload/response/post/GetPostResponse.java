@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -20,10 +21,14 @@ public class GetPostResponse {
 
     private String content;
 
+    private String writer;
+
     private String user;
+
+    private LocalDate date;
 
     private List<String> image;
 
-    private Integer like;
+    private Integer likeNum;
 
 }
