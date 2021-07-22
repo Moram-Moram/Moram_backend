@@ -19,19 +19,23 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtUtil jwtUtil;
 
     @Override
-    public void configure(HttpSecurity http) throws  Exception{
+    public void configure(HttpSecurity http) throws  Exception {
         http
-
                 .cors().and()
                 .csrf().disable()
+
                 .sessionManagement()
-                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                    .and()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
                 .addFilterBefore(new JwtFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class) //
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/post/*").hasAnyRole()
+                .antMatchers(HttpMethod.POST, "/comment/*").hasAnyRole("WATER_DROP", "SCOTCH_MIST", "DRIZZLE", "SHOWER")
+                .antMatchers("/auth", "/user", "/token", "/post/").permitAll()
+                .antMatchers("/admin/report/**").hasRole("ADMIN")
                 .antMatchers("/*").permitAll()
-                .antMatchers("/admin/*").hasRole("ADMIN")
+                .anyRequest().authenticated()
                 .and()
                 .formLogin().disable();
     }
