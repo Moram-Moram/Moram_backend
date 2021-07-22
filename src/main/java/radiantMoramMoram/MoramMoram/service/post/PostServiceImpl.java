@@ -22,11 +22,6 @@ import radiantMoramMoram.MoramMoram.exception.PostNotFoundException;
 import radiantMoramMoram.MoramMoram.exception.UserNotFoundException;
 import radiantMoramMoram.MoramMoram.payload.request.post.LikePostRequest;
 import radiantMoramMoram.MoramMoram.payload.request.post.ReportPostRequest;
-<<<<<<< Updated upstream
-=======
-import radiantMoramMoram.MoramMoram.payload.request.post.WritePostRequest;
-import radiantMoramMoram.MoramMoram.payload.response.post.GetPostResponse;
->>>>>>> Stashed changes
 import radiantMoramMoram.MoramMoram.repository.UserRepository;
 import radiantMoramMoram.MoramMoram.repository.post.CategoryRepository;
 import radiantMoramMoram.MoramMoram.repository.post.ImageRepository;
@@ -35,14 +30,11 @@ import radiantMoramMoram.MoramMoram.security.token.JwtUtil;
 
 import javax.transaction.Transactional;
 import java.io.File;
-<<<<<<< Updated upstream
 import java.util.*;
-=======
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
->>>>>>> Stashed changes
 import java.util.stream.Collectors;
 
 @Service
@@ -108,13 +100,6 @@ public class PostServiceImpl implements PostService {
 
         Post post = postRepository.findById(postId)
                 .orElseThrow(PostNotFoundException::new);
-
-        User user = userRepository.findById(jwtUtil.getUserIdFromJwtToken(token))
-                .orElseThrow(UserNotFoundException::new);
-
-        int likePostNum = likePostRepository.postLikeNum(postId);
-
-        List<String> fileNames = imageRepository.findByPostOrderById(postId)
 
         User user = userRepository.findById(jwtUtil.getUserIdFromJwtToken(token))
                 .orElseThrow(UserNotFoundException::new);
@@ -214,7 +199,6 @@ public class PostServiceImpl implements PostService {
                 .image(fileNames)
                 .build();
     }
-<<<<<<< Updated upstream
 
     @Transactional
     public PostsResponse getPostList(String category){
