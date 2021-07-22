@@ -10,6 +10,9 @@ import java.util.List;
 @Getter
 @Builder
 public class PostsResponse {
+
     String category;
+
     List<PostListResponse> posts;
+
 }
