@@ -54,4 +54,12 @@ public class User {
         }
         return "";
     }
+
+    public User update(String password, boolean whiteCheck) {
+        this.password = password;
+        this.whiteCheck = whiteCheck;
+
+        return this;
+    }
+
 }
