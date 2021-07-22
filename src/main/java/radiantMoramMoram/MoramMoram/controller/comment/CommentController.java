@@ -21,14 +21,14 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    @PostMapping("/post/{postId}")
+    @PostMapping("/comment/{postId}")
     public ResponseEntity<HttpStatus> writeComment(HttpServletRequest request, @PathVariable int postId, @RequestBody WriteCommentRequest commentReq){
         String userId = jwtUtil.getUserIdFromJwtToken(request.getHeader("Authorization"));
         commentService.writeComment(commentReq, userId, postId);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping("/post/{postId}")
+    @GetMapping("/comment/{postId}")
     public List<CommentResponse> commentList(@PathVariable int postId){
         return commentService.commentList(postId);
     }

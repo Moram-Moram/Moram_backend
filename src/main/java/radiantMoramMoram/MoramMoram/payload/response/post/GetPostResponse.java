@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -23,7 +22,11 @@ public class GetPostResponse {
 
     private String writer;
 
+<<<<<<< HEAD
     private String user;
+=======
+    private LocalDate date;
+>>>>>>> develop
 
     private LocalDate date;
 

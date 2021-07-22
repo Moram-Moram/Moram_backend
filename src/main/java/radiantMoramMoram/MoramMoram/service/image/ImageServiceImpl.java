@@ -13,7 +13,7 @@ import java.io.InputStream;
 @Service
 public class ImageServiceImpl implements ImageService{
 
-    @Value("${image.upload.dir}")
+    @Value("${post.image.path}")
     private String imagePath;
 
     @SneakyThrows
