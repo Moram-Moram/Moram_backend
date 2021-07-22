@@ -1,18 +1,18 @@
 package radiantMoramMoram.MoramMoram.payload.response.mypage;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 @Getter
+@Setter
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
 public class MyPageResponse {
 
-    private final String id;
+    private String id;
 
-    private final String name;
+    private String name;
 
-    private final String role;
+    private String role;
 
 }
