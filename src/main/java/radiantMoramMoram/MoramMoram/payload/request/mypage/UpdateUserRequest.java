@@ -11,8 +11,6 @@ public class UpdateUserRequest {
 
     private String password;
 
-    private String newPassword;
-
     private boolean checkBox;
 
 }
