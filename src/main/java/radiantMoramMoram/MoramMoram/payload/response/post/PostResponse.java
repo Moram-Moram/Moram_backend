@@ -30,4 +30,10 @@ public class PostResponse {
 
     private Integer likeNum;
 
+    private boolean userCheck;
+
+    private boolean likeCheck;
+
+    private boolean reportCheck;
+
 }
