@@ -15,7 +15,8 @@ public enum ErrorCode {
     POST_NOT_FOUND(404, "Post Not Found"),
     CATEGORY_NOT_FOUND(404, "Category Not Found"),
     USER_ALREADY_EXISTS(409,"User Already Exists"),
-    IMAGE_NOT_FOUND(404, "image not found");
+    IMAGE_NOT_FOUND(404, "image not found"),
+    AUTHORIZATION_FAILURE(400, "AUTHORIZATION_FAILURE");
 
     private final int status;
 
