@@ -213,6 +213,17 @@ public class PostServiceImpl implements PostService {
 
         for (Post p : posts) {
             List<String> fileNames = getFileFromPost(p);
+
+            postList.add(
+                    PostListResponse.builder()
+                    .content(p.getContent())
+                    .date(p.getDate())
+                    .image(fileNames.get(0))
+                    .postId(p.getId())
+                    .title(p.getTitle())
+                    .writer(p.getUser().getNickname())
+                    .build()
+            );
         }
 
         return new PostsResponse(category, postList);
