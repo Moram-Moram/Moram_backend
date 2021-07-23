@@ -29,6 +29,5 @@ public class ReportController {
     public void deletePost(@PathVariable int postId){
         reportService.deletePost(postId);
     }
-
-
+    
 }
