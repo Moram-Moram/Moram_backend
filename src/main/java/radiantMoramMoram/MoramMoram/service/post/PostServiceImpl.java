@@ -197,7 +197,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostResponse randomPost(int num) {
+    public PostResponse randomPost(int num, String token) {
 
         Long number = postRepository.count();
         Random random = new Random();
@@ -222,6 +222,9 @@ public class PostServiceImpl implements PostService {
                 .date(post.getDate())
                 .likeNum(likeNum)
                 .fileName(fileNames)
+                .userCheck(checkUser(token, post.getId()))
+                .likeCheck(false)
+                .reportCheck(false)
                 .build();
     }
 
