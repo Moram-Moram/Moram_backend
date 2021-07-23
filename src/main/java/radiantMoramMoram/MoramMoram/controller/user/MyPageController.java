@@ -1,21 +1,20 @@
 package radiantMoramMoram.MoramMoram.controller.user;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.hibernate.annotations.Parameter;
+import org.springframework.web.bind.annotation.*;
 import radiantMoramMoram.MoramMoram.payload.response.mypage.MyPageResponse;
 import radiantMoramMoram.MoramMoram.service.user.UserService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/user/{userId}")
+@RequestMapping("/user")
 public class MyPageController {
 
-    private UserService userService;
+    private final UserService userService;
 
-    @GetMapping
+    //@RequestMapping(value = "{userId}",  method=RequestMethod.GET)
+    @GetMapping("{userId}")
     public MyPageResponse getMyPage(@PathVariable String userId) {
         return userService.getMyPage(userId);
     }
