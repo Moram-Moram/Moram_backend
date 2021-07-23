@@ -3,6 +3,7 @@ package radiantMoramMoram.MoramMoram.service.post;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import radiantMoramMoram.MoramMoram.entity.post.category.Category;
@@ -16,15 +17,18 @@ import radiantMoramMoram.MoramMoram.exception.UserNotFoundException;
 import radiantMoramMoram.MoramMoram.payload.request.post.LikePostRequest;
 import radiantMoramMoram.MoramMoram.payload.request.post.ReportPostRequest;
 import radiantMoramMoram.MoramMoram.payload.request.post.WritePostRequest;
+import radiantMoramMoram.MoramMoram.payload.response.mypage.MyPagePostResponse;
 import radiantMoramMoram.MoramMoram.payload.response.post.GetPostResponse;
 import radiantMoramMoram.MoramMoram.repository.UserRepository;
 import radiantMoramMoram.MoramMoram.repository.post.CategoryRepository;
 import radiantMoramMoram.MoramMoram.repository.post.ImageRepository;
 import radiantMoramMoram.MoramMoram.repository.post.LikePostRepository;
 import radiantMoramMoram.MoramMoram.repository.post.PostRepository;
+import radiantMoramMoram.MoramMoram.security.auth.Authority;
 import radiantMoramMoram.MoramMoram.security.token.JwtUtil;
 
 import java.io.File;
+import java.net.UnknownServiceException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -175,5 +179,49 @@ public class PostServiceImpl implements PostService {
                 .build();
     }
 
+    @Override
+    public List<MyPagePostResponse> getMyPagePost(String userId) {
+
+        User users = userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
+
+        return postRepository.findByUser(users).stream()
+                .map(post -> MyPagePostResponse.builder()
+                        .id(post.getId())
+                        .writer(post.getUser().toString())
+                        .title(post.getTitle())
+                        .date(post.getDate())
+                        .image(getImage(post.getId()))
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<MyPagePostResponse> getLikePost(String userId) {
+
+        User users = userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
+
+
+        if(users.getRole().equals(Authority.SHOWER) ) {
+            return likePostRepository.findByUser(users).stream()
+                    .map(post -> MyPagePostResponse.builder()
+                            .id(post.getPost().getId())
+                            .writer(post.getUser().toString())
+                            .title(post.getPost().getTitle())
+                            .date(post.getPost().getDate())
+                            .image(getImage(post.getPost().getId()))
+                            .build())
+                    .collect(Collectors.toList());
+        }
+        else {
+            return null;
+        }
+    }
+
+    private List<String> getImage(Integer postId) {
+        return imageRepository.findByPostOrderById(postId)
+                .stream().map(Image::getFileName).collect(Collectors.toList());
+    }
 
 }
