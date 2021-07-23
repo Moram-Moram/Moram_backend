@@ -14,6 +14,7 @@ import java.time.LocalDate;
 public class Post {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     private String title;
@@ -23,10 +24,11 @@ public class Post {
     @Column(name = "create_at")
     private LocalDate date;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id")
     private User user;
 
-    private boolean report;
+    private boolean report = false;
 
     public Post setReport(boolean report) {
         this.report = report;
