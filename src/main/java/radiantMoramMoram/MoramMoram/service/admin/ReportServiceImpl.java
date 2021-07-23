@@ -7,12 +7,10 @@ import org.springframework.stereotype.Service;
 import radiantMoramMoram.MoramMoram.entity.post.Post;
 import radiantMoramMoram.MoramMoram.entity.post.image.Image;
 import radiantMoramMoram.MoramMoram.exception.PostNotFoundException;
-import radiantMoramMoram.MoramMoram.payload.response.admin.ReportListResponse;
 import radiantMoramMoram.MoramMoram.payload.response.admin.ReportPostResponse;
 import radiantMoramMoram.MoramMoram.payload.response.admin.ReportResponse;
 import radiantMoramMoram.MoramMoram.repository.admin.ReportRepository;
 import radiantMoramMoram.MoramMoram.repository.post.ImageRepository;
-import radiantMoramMoram.MoramMoram.repository.post.PostRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,32 +21,19 @@ public class ReportServiceImpl implements ReportService {
 
     private final ReportRepository reportRepository;
     private final ImageRepository imageRepository;
-    private final PostRepository postRepository;
 
     @Override
-    public ReportListResponse getReportList(Pageable pageable) {
+    public List<ReportPostResponse> getReportList() {
 
-        Page<Post> posts = reportRepository.findAllBy(pageable);
-
-        int totalPage = posts.getTotalPages();
-
-        return new ReportListResponse(totalPage, posts.map((Post post) -> buildReport(post, post.getId()))
-                .stream().collect(Collectors.toList()));
-    }
-
-    private ReportResponse buildReport(Post post, int postId) {
-
-        List<String> fileNames = imageRepository.findByPostOrderById(postId)
-                .stream().map(Image::getFileName)
+        return reportRepository.findAllBy().stream()
+                .map(post -> ReportPostResponse.builder()
+                        .id(post.getId())
+                        .title(post.getTitle())
+                        .writer(post.getUser().getNickname())
+                        .date(post.getDate())
+                        .image(getImage(post.getId()))
+                        .build())
                 .collect(Collectors.toList());
-
-        return ReportResponse.builder()
-                .id(post.getId())
-                .title(post.getTitle())
-                .writer(post.getUser().getId())
-                .date(post.getDate())
-                .image(fileNames)
-                .build();
     }
 
     @Override
@@ -57,19 +42,21 @@ public class ReportServiceImpl implements ReportService {
         Post post = reportRepository.findById(postId)
                 .orElseThrow(PostNotFoundException::new);
 
-        List<String> fileNames = imageRepository.findByPostOrderById(postId)
-                .stream().map(Image::getFileName)
-                .collect(Collectors.toList());
-
         return ReportPostResponse.builder()
                 .id(post.getId())
                 .title(post.getTitle())
-                .writer(post.getUser().getId())
+                .writer(post.getUser().getNickname())
                 .content(post.getContent())
                 .date(post.getDate())
-                .image(fileNames)
+                .image(getImage(postId))
                 .build();
     }
+
+    private List<String> getImage(Integer postId) {
+        return imageRepository.findByPostOrderById(postId)
+                .stream().map(Image::getFileName).collect(Collectors.toList());
+    }
+
 
     @Override
     public void deletePost(int postId){
