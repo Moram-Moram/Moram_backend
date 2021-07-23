@@ -1,15 +1,8 @@
 package radiantMoramMoram.MoramMoram.service.post;
 import radiantMoramMoram.MoramMoram.payload.request.post.WritePostRequest;
 
-import org.springframework.data.domain.Pageable;
-import radiantMoramMoram.MoramMoram.entity.user.User;
 import radiantMoramMoram.MoramMoram.payload.request.post.LikePostRequest;
-import radiantMoramMoram.MoramMoram.payload.request.post.ReportPostRequest;
-<<<<<<< HEAD
-=======
-import radiantMoramMoram.MoramMoram.payload.request.post.WritePostRequest;
 import radiantMoramMoram.MoramMoram.payload.response.mypage.MyPagePostResponse;
->>>>>>> user
 import radiantMoramMoram.MoramMoram.payload.response.post.GetPostResponse;
 import radiantMoramMoram.MoramMoram.payload.response.post.PostsResponse;
 
@@ -31,8 +24,8 @@ public interface PostService {
 
     PostsResponse getPostList(String category);
 
-    List<MyPagePostResponse> getMyPagePost(String userId);
+    List<MyPagePostResponse> getMyPagePost(String userId, String token);
 
-    List<MyPagePostResponse> getLikePost(String userId);
+    List<MyPagePostResponse> getLikePost(String userId, String token);
 
 }

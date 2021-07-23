@@ -18,9 +18,9 @@ public interface UserService {
 
     void deleteUser(String userId);
 
-    void updateUser(UpdateUserRequest updateUserRequest, User user);
+    void updateUser(UpdateUserRequest updateUserRequest, String token);
 
-    MyPageResponse getMyPage(String userId);
+    MyPageResponse getMyPage(String userId, String token);
 
     void duplicateIdCheck(String userId);
 

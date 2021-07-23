@@ -6,5 +6,5 @@ public class ImageKey implements Serializable {
 
     private int post;
 
-    private String fileName;
+    private String path;
 }

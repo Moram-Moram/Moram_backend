@@ -1,18 +1,18 @@
 package radiantMoramMoram.MoramMoram.payload.response.post;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
 import java.util.List;
 
-@ToString
 @Getter
-@Builder
+@AllArgsConstructor
 public class PostsResponse {
 
-    String category;
+    private String category;
 
-    List<PostListResponse> posts;
+    private List<PostListResponse> posts;
 
 }
