@@ -20,7 +20,7 @@ public class WritePostRequest {
 
     private String  user;
 
-    private MultipartFile[] image;
+    private MultipartFile[] fileName;
 
     private String[] category;
 }
