@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import radiantMoramMoram.MoramMoram.entity.user.User;
 import radiantMoramMoram.MoramMoram.payload.response.mypage.MyPagePostResponse;
 import radiantMoramMoram.MoramMoram.payload.response.mypage.MyPageResponse;
+import radiantMoramMoram.MoramMoram.service.post.PostService;
 import radiantMoramMoram.MoramMoram.service.user.UserService;
 
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
 public class MyPageController {
 
     private final UserService userService;
+    private final PostService postService;
 
     @GetMapping("/{userId}")
     public MyPageResponse getMyPage(@PathVariable String userId) {
@@ -23,13 +25,13 @@ public class MyPageController {
     }
 
     @GetMapping("/{userId}/mine")
-    public List<MyPagePostResponse> getMyPost(@PathVariable User user, int postId) {
-        return userService.getMyPagePost(user, postId);
+    public List<MyPagePostResponse> getMyPost(@PathVariable String userId) {
+        return postService.getMyPagePost(userId);
     }
     
     @GetMapping("/{userId}/like")
-    public List<MyPagePostResponse> getLikePost(@PathVariable User userId, int postId) {
-        return userService.getLikePost(userId, postId);
+    public List<MyPagePostResponse> getLikePost(@PathVariable String userId) {
+        return postService.getLikePost(userId);
     }
 
 }
