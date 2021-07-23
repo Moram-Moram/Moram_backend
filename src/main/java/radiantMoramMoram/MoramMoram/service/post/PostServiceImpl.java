@@ -49,12 +49,14 @@ public class PostServiceImpl implements PostService {
     @Value("${post.image.path}")
     private String imagePath;
 
-    public boolean checkUser(String userId, int postId){
+    public boolean checkUser(String token, int postId){
         Optional<Post> post = postRepository.findById(postId);
-        if (post.isPresent()){
-            return post.get().getUser().getId().equals(userId);
+        post.orElseThrow(PostNotFoundException::new);
+        if (token!=null){
+            return post.get().getUser().getId().equals(jwtUtil.getUserIdFromJwtToken(token));
+        } else{
+            return false;
         }
-        throw new PostNotFoundException();
     }
 
     @SneakyThrows
