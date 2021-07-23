@@ -1,16 +1,14 @@
 package radiantMoramMoram.MoramMoram.service.admin;
 
+import com.sun.istack.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import radiantMoramMoram.MoramMoram.entity.post.Post;
 import radiantMoramMoram.MoramMoram.entity.post.image.Image;
 import radiantMoramMoram.MoramMoram.exception.PostNotFoundException;
 import radiantMoramMoram.MoramMoram.payload.response.admin.ReportPostResponse;
-import radiantMoramMoram.MoramMoram.payload.response.admin.ReportResponse;
-import radiantMoramMoram.MoramMoram.repository.admin.ReportRepository;
 import radiantMoramMoram.MoramMoram.repository.post.ImageRepository;
+import radiantMoramMoram.MoramMoram.repository.post.PostRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,13 +17,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ReportServiceImpl implements ReportService {
 
-    private final ReportRepository reportRepository;
+    private final PostRepository postRepository;
     private final ImageRepository imageRepository;
 
     @Override
     public List<ReportPostResponse> getReportList() {
 
-        return reportRepository.findAllBy().stream()
+        return postRepository.findByReport(true).stream()
                 .map(post -> ReportPostResponse.builder()
                         .id(post.getId())
                         .title(post.getTitle())
@@ -34,12 +32,13 @@ public class ReportServiceImpl implements ReportService {
                         .image(getImage(post.getId()))
                         .build())
                 .collect(Collectors.toList());
+
     }
 
     @Override
     public ReportPostResponse getReportPost(int postId) {
 
-        Post post = reportRepository.findById(postId)
+        Post post = postRepository.findById(postId)
                 .orElseThrow(PostNotFoundException::new);
 
         return ReportPostResponse.builder()
@@ -63,10 +62,10 @@ public class ReportServiceImpl implements ReportService {
         if(findByPost(postId)){
             throw new PostNotFoundException();
         }
-        reportRepository.deleteById(postId);
+        postRepository.deleteById(postId);
     }
 
     private boolean findByPost(int postId){
-        return reportRepository.findById(postId).isEmpty();
+        return postRepository.findById(postId).isEmpty();
     }
 }
