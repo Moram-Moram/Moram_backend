@@ -22,8 +22,4 @@ public interface UserService {
 
     MyPageResponse getMyPage(String userId);
 
-    List<MyPagePostResponse> getMyPagePost(User user, int postId);
-
-    List<MyPagePostResponse> getLikePost(User user, int postId);
-
 }

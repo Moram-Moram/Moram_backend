@@ -14,6 +14,7 @@ import radiantMoramMoram.MoramMoram.error.BasicException;
 import radiantMoramMoram.MoramMoram.error.ErrorCode;
 import radiantMoramMoram.MoramMoram.error.TokenErrorCode;
 import radiantMoramMoram.MoramMoram.error.TokenException;
+import radiantMoramMoram.MoramMoram.exception.PostNotFoundException;
 import radiantMoramMoram.MoramMoram.exception.UserNotFoundException;
 import radiantMoramMoram.MoramMoram.payload.request.mypage.UpdateUserRequest;
 import radiantMoramMoram.MoramMoram.payload.request.user.LoginRequest;
@@ -31,6 +32,7 @@ import radiantMoramMoram.MoramMoram.security.token.JwtUtil;
 import radiantMoramMoram.MoramMoram.payload.response.token.TokenResponse;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static radiantMoramMoram.MoramMoram.entity.user.User.pwEncrypt;
@@ -109,46 +111,5 @@ public class UserServiceImpl implements UserService {
                 .name(user.getNickname())
                 .role(user.getRole().toString())
                 .build();
-    }
-
-    @Override
-    public List<MyPagePostResponse> getMyPagePost(User user, int postId) {
-
-        List<String> fileNames = imageRepository.findByPostOrderById(postId)
-                .stream().map(Image::getFileName)
-                .collect(Collectors.toList());
-
-        return postRepository.findByUser(user).stream()
-                    .map(post -> MyPagePostResponse.builder()
-                    .id(post.getId())
-                    .writer(post.getUser().toString())
-                    .title(post.getTitle())
-                    .date(post.getDate())
-                    .image(fileNames)
-                    .build())
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<MyPagePostResponse> getLikePost(User user, int postId) {
-
-        List<String> fileNames = imageRepository.findByPostOrderById(postId)
-                .stream().map(Image::getFileName)
-                .collect(Collectors.toList());
-
-        if(user.getRole().equals(Authority.SHOWER) ) {
-            return likePostRepository.findByUser(user).stream()
-                    .map(post -> MyPagePostResponse.builder()
-                            .id(post.getPost().getId())
-                            .writer(post.getUser().toString())
-                            .title(post.getPost().getTitle())
-                            .date(post.getPost().getDate())
-                            .image(fileNames)
-                            .build())
-                    .collect(Collectors.toList());
-        }
-        else {
-            return null;
-        }
     }
 }
