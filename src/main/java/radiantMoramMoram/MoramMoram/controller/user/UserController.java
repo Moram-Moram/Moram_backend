@@ -48,4 +48,14 @@ public class UserController {
         userService.updateUser(updateUserRequest, user);
     }
 
+    @GetMapping("/user/{userId}/exists")
+    public void duplicateIdCheck(@PathVariable String userId){
+        userService.duplicateIdCheck(userId);
+    }
+
+    @GetMapping("/userNickName/{userNickName}/exists")
+    public void duplicateNickNameCheck(@PathVariable String userNickName){
+        userService.duplicateNickNameCheck(userNickName);
+    }
+
 }

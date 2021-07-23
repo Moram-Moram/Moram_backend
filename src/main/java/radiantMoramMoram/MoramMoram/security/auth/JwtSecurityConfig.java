@@ -30,12 +30,12 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(new JwtFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .antMatchers("/**").permitAll()
                 .antMatchers("/like/*").hasAnyRole("WATER_DROP", "SCOTCH_MIST", "DRIZZLE", "SHOWER")
                 .antMatchers(HttpMethod.GET, "/user/*", "/user/*/update").hasAnyRole("WATER_DROP", "SCOTCH_MIST", "DRIZZLE", "SHOWER")
                 .antMatchers(HttpMethod.POST, "/comment/*", "/post", "/post/*").hasAnyRole("WATER_DROP", "SCOTCH_MIST", "DRIZZLE", "SHOWER")
                 .antMatchers(HttpMethod.DELETE, "/post/*", "/user/*").hasAnyRole("WATER_DROP", "SCOTCH_MIST", "DRIZZLE", "SHOWER")
                 .antMatchers("/admin/report/**").hasRole("ADMIN")
+                .antMatchers("/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().disable();

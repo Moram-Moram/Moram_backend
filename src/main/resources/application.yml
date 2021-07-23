@@ -1,5 +1,5 @@
 server:
-  port: 8088
+  port: 8008
   jackson:
     property-naming-strategy: SNAKE_CASE
   servlet:
@@ -11,28 +11,17 @@ server:
 
 spring:
   datasource:
-    url: ${DATABASE_HOST:}
+    url: jdbc:mysql://moram:morammoram12@moram-moram.cwjdlhpngx8e.us-east-2.rds.amazonaws.com:3306/moram_moram
     driver-class-name: com.mysql.cj.jdbc.Driver
+
   redis:
     host: ${REDIS_HOST:localhost}
     port: ${REDIS_PORT:6379}
-
-posts:
-  image:
-    path: ${IMAGE_PATH:/}
-
-image:
-  upload:
-    dir: /
-
   jpa:
-    hibernate:
-      ddl-auto: none
-    open-in-view: false
-
+    show-sql: true
 auth:
   jwt:
-    secret: ${JWT_SECRET:}
+    secret: 45VCO4fzXw4O32IV0qF3hixZLWChc4WiB9li3mw-WPcnfe7c
     exp:
       access: ${JWT_ACCESS_EXP:3600}
       refresh: ${JWT_REFRESH_EXP:3600}
@@ -42,5 +31,5 @@ auth:
     prefix: ${JWT_PREFIX:Bearer}
 
 post:
-  file:
+  image:
     path: ${IMAGE_PATH:/}

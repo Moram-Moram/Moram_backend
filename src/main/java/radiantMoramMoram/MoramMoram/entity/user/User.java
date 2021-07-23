@@ -25,7 +25,7 @@ public class User {
     @Setter
     @Convert(converter = AuthorityAttributeConverter.class)
     private Authority role = Authority.WATER_DROP;
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, mappedBy = "id", orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, mappedBy = "user", orphanRemoval = true)
     private List<Post> posts = new ArrayList<>();
 
     public User() {

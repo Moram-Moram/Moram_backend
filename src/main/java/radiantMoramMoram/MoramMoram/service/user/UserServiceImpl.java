@@ -10,8 +10,8 @@ import radiantMoramMoram.MoramMoram.error.BasicException;
 import radiantMoramMoram.MoramMoram.error.ErrorCode;
 import radiantMoramMoram.MoramMoram.error.TokenErrorCode;
 import radiantMoramMoram.MoramMoram.error.TokenException;
+import radiantMoramMoram.MoramMoram.exception.UserAlreadyExistsException;
 import radiantMoramMoram.MoramMoram.exception.UserNotFoundException;
-import radiantMoramMoram.MoramMoram.payload.request.mypage.DeleteUserRequest;
 import radiantMoramMoram.MoramMoram.payload.request.mypage.UpdateUserRequest;
 import radiantMoramMoram.MoramMoram.payload.request.user.LoginRequest;
 import radiantMoramMoram.MoramMoram.payload.request.user.SignUpRequest;
@@ -96,4 +96,21 @@ public class UserServiceImpl implements UserService {
                 .role(user.getRole().toString())
                 .build();
     }
+
+    @Override
+    public void duplicateIdCheck(String userId) {
+        userRepository.findById(userId)
+                .ifPresent(u -> {
+                    throw new UserAlreadyExistsException();
+                });
+    }
+
+    @Override
+    public void duplicateNickNameCheck(String userNickName) {
+        userRepository.findByNickname(userNickName)
+                .ifPresent(user -> {
+                    throw new UserAlreadyExistsException();
+                });
+    }
+
 }
