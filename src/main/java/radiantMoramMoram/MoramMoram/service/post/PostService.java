@@ -12,11 +12,11 @@ public interface PostService {
 
     GetPostResponse getPost(Integer postId, String token);
 
-    void deletePost(Integer postId);
+    void deletePost(Integer postId, String token);
 
     void likePost(LikePostRequest likePostRequest);
 
-    void reportPost(ReportPostRequest reportPostRequest);
+    void reportPost(Integer postId, String token);
 
     GetPostResponse randomPost(int num);
 
