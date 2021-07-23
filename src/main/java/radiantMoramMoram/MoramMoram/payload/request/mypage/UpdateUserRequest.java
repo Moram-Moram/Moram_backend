@@ -14,6 +14,6 @@ public class UpdateUserRequest {
     @NotEmpty
     private String password;
 
-    private boolean checkBox;
+    private boolean whiteCheck;
 
 }
