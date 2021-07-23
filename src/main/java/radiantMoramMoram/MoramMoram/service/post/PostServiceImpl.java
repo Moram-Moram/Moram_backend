@@ -5,10 +5,12 @@ import org.springframework.stereotype.Service;
 import radiantMoramMoram.MoramMoram.entity.post.Post;
 import radiantMoramMoram.MoramMoram.error.BasicException;
 import radiantMoramMoram.MoramMoram.error.ErrorCode;
+import radiantMoramMoram.MoramMoram.exception.*;
 import radiantMoramMoram.MoramMoram.payload.request.post.WritePostRequest;
 import radiantMoramMoram.MoramMoram.payload.response.post.PostResponse;
 import radiantMoramMoram.MoramMoram.payload.response.post.PostListResponse;
 import radiantMoramMoram.MoramMoram.payload.response.post.PostsResponse;
+import radiantMoramMoram.MoramMoram.repository.CommentRepository;
 import radiantMoramMoram.MoramMoram.repository.post.PostRepository;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,8 +20,6 @@ import radiantMoramMoram.MoramMoram.entity.post.category.CategoryEnum;
 import radiantMoramMoram.MoramMoram.entity.post.image.Image;
 import radiantMoramMoram.MoramMoram.entity.post.like.LikePost;
 import radiantMoramMoram.MoramMoram.entity.user.User;
-import radiantMoramMoram.MoramMoram.exception.PostNotFoundException;
-import radiantMoramMoram.MoramMoram.exception.UserNotFoundException;
 import radiantMoramMoram.MoramMoram.payload.request.post.LikePostRequest;
 import radiantMoramMoram.MoramMoram.payload.response.mypage.MyPagePostResponse;
 import radiantMoramMoram.MoramMoram.repository.UserRepository;
@@ -44,6 +44,7 @@ public class PostServiceImpl implements PostService {
     private final CategoryRepository categoryRepository;
     private final ImageRepository imageRepository;
     private final LikePostRepository likePostRepository;
+    private final CommentRepository commentRepository;
 
     @Value("${post.image.path}")
     private String imagePath;
@@ -126,7 +127,23 @@ public class PostServiceImpl implements PostService {
         postRepository.findById(postId)
                 .orElseThrow(PostNotFoundException::new);
 
+        imageRepository.findByPostId(postId)
+                .orElseThrow(ImageNotFoundException::new);
+
+        categoryRepository.findByPostId(postId)
+                .orElseThrow(CategoryNotFoundException::new);
+
+        commentRepository.findByPostId(postId)
+                .orElseThrow(CommentNotFoundException::new);
+
         postRepository.deleteById(postId);
+
+        imageRepository.deleteByPostId(postId);
+
+        categoryRepository.deleteByPostId(postId);
+
+        commentRepository.deleteByPostId(postId);
+
     }
 
     @Override
