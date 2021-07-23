@@ -59,20 +59,6 @@ public class UserServiceImpl implements UserService {
         return jwtUtil.createToken(tokenInfoReq);
     }
 
-    @Override
-    public void duplicateCheck(SignUpRequest signUpRequest) {
-        userRepository.findById(signUpRequest.getId())
-                .ifPresent(u -> {
-                    throw new UserAlreadyExistsException();
-                });
-
-        userRepository.findByNickname(signUpRequest.getNickname())
-                .ifPresent(user -> {
-                    throw new UserAlreadyExistsException();
-                });
-    }
-
-
     public AccessTokenResponse tokenRefresh(String token){
         if(!jwtUtil.checkTypeFromToken(token)){
             throw new TokenException(TokenErrorCode.INVALID_TOKEN);
@@ -110,4 +96,21 @@ public class UserServiceImpl implements UserService {
                 .role(user.getRole().toString())
                 .build();
     }
+
+    @Override
+    public void duplicateIdCheck(String userId) {
+        userRepository.findById(userId)
+                .ifPresent(u -> {
+                    throw new UserAlreadyExistsException();
+                });
+    }
+
+    @Override
+    public void duplicateNickNameCheck(String userNickName) {
+        userRepository.findByNickname(userNickName)
+                .ifPresent(user -> {
+                    throw new UserAlreadyExistsException();
+                });
+    }
+
 }
