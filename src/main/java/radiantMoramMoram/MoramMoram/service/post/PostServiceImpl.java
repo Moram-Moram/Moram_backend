@@ -49,6 +49,16 @@ public class PostServiceImpl implements PostService {
     @Value("${post.image.path}")
     private String imagePath;
 
+    public boolean checkUser(String token, int postId){
+        Optional<Post> post = postRepository.findById(postId);
+        post.orElseThrow(PostNotFoundException::new);
+        if (token!=null){
+            return post.get().getUser().getId().equals(jwtUtil.getUserIdFromJwtToken(token));
+        } else{
+            return false;
+        }
+    }
+
     @SneakyThrows
     @Override
     public void writePost(WritePostRequest writePostRequest, String token) {

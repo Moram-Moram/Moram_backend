@@ -25,7 +25,7 @@ public class ReportController {
         return reportService.getReportPost(postId);
     }
 
-    @DeleteMapping("delete/{postId}")
+    @DeleteMapping("/{postId}")
     public void deletePost(@PathVariable int postId){
         reportService.deletePost(postId);
     }

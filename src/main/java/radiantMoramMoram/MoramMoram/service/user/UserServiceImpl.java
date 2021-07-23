@@ -34,9 +34,6 @@ import static radiantMoramMoram.MoramMoram.entity.user.User.pwEncrypt;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
-    private final PostRepository postRepository;
-    private final ImageRepository imageRepository;
-    private final LikePostRepository likePostRepository;
 
     @Override
     public void join(SignUpRequest userReq){
