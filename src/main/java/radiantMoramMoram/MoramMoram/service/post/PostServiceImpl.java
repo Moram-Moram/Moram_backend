@@ -67,7 +67,7 @@ public class PostServiceImpl implements PostService {
                         .build()
         );
 
-        for (MultipartFile image : writePostRequest.getImage()) {
+        for (MultipartFile image : writePostRequest.getFileName()) {
 
             String fileName = UUID.randomUUID().toString();
 
@@ -106,7 +106,7 @@ public class PostServiceImpl implements PostService {
 
         int likePostNum = likePostRepository.postLikeNum(postId);
 
-        List<String> fileNames = imageRepository.findAllByPost(post)
+        List<String> fileNames = imageRepository.findByPostOrderById(post)
                 .stream().map(Image::getFileName)
                 .collect(Collectors.toList());
 
@@ -114,13 +114,16 @@ public class PostServiceImpl implements PostService {
                 .title(post.getTitle())
                 .content(post.getContent())
                 .writer(user.getNickname())
-                .image(fileNames)
+                .fileName(fileNames)
                 .likeNum(likePostNum)
                 .build();
     }
 
     @Override
-    public void deletePost(Integer postId) {
+    public void deletePost(Integer postId, String token) {
+
+        User user = userRepository.findById(jwtUtil.getUserIdFromJwtToken(token))
+                .orElseThrow(UserNotFoundException::new);
 
         postRepository.findById(postId)
                 .orElseThrow(PostNotFoundException::new);
@@ -152,9 +155,10 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void reportPost(ReportPostRequest reportPostRequest) {
+    public void reportPost(Integer postId, String token) {
 
-        int postId = reportPostRequest.getPostId();
+        User user = userRepository.findById(jwtUtil.getUserIdFromJwtToken(token))
+                .orElseThrow(UserNotFoundException::new);
 
         Post post = postRepository.findById(postId)
                 .orElseThrow(PostNotFoundException::new);
@@ -167,21 +171,20 @@ public class PostServiceImpl implements PostService {
 
     }
 
+    @Override
     public GetPostResponse randomPost(int num){
 
         Long number = postRepository.count();
         Random random = new Random();
         int r = random.nextInt(number.intValue());
-        if(r==0) r=num;
+        if(r==0) r++;
 
         Optional<Post> p = postRepository.findById(r);
         Post post = p.orElseGet(postRepository::findRandomPost);
 
-        if(post==null){
-            throw new BasicException(ErrorCode.POST_DOES_NOT_EXIST);
-        }
-
-        List<String> fileNames = getFileFromPost(post);
+        List<String> fileNames = imageRepository.findByPostOrderById(post.getId())
+                .stream().map(Image::getFileName)
+                .collect(Collectors.toList());
 
         int likeNum = likePostRepository.postLikeNum(post.getId());
 
@@ -189,14 +192,11 @@ public class PostServiceImpl implements PostService {
                 .postId(post.getId())
                 .title(post.getTitle())
                 .content(post.getContent())
-<<<<<<< Updated upstream
                 .writer(post.getUser().getNickname())
-=======
                 .user(post.getUser().getNickname())
->>>>>>> Stashed changes
                 .date(post.getDate())
                 .likeNum(likeNum)
-                .image(fileNames)
+                .fileName(fileNames)
                 .build();
     }
 
@@ -218,28 +218,6 @@ public class PostServiceImpl implements PostService {
 
         for(Post p : posts){
             List<String> fileNames = getFileFromPost(p);
-
-=======
-
-    @Transactional
-    public PostsResponse getPostList(String category){
-
-        List<Integer> postIdList = categoryRepository.categoryPostListReturn(category);
-
-        if(postIdList.isEmpty()){
-            throw new BasicException(ErrorCode.CATEGORY_NOT_FOUND);
-        }
-
-        List<Post> posts = new ArrayList<>();
-        for(int postId : postIdList){
-            posts.add(postRepository.findById(postId).orElseThrow(PostNotFoundException::new));
-        }
-
-        List<PostListResponse> postList = new ArrayList<>();
-
-        for(Post p : posts){
-            List<String> fileNames = getFileFromPost(p);
->>>>>>> Stashed changes
             postList.add(
                     PostListResponse.builder()
                     .content(p.getContent())
@@ -260,11 +238,7 @@ public class PostServiceImpl implements PostService {
     }
 
     private List<String> getFileFromPost(Post post){
-<<<<<<< Updated upstream
         return imageRepository.findByPostOrderById(post)
-=======
-        return imageRepository.findAllByPost(post)
->>>>>>> Stashed changes
                 .stream().map(Image::getFileName)
                 .collect(Collectors.toList());
     }
