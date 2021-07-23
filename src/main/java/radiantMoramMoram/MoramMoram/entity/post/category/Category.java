@@ -18,6 +18,7 @@ public class Category {
 
     @Id
     @ManyToOne
+    @JoinColumn(name = "post_id")
     private Post post;
 
     @Id
