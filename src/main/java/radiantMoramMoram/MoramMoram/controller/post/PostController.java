@@ -4,9 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import radiantMoramMoram.MoramMoram.payload.request.post.LikePostRequest;
-import radiantMoramMoram.MoramMoram.payload.request.post.ReportPostRequest;
 import radiantMoramMoram.MoramMoram.payload.request.post.WritePostRequest;
-import radiantMoramMoram.MoramMoram.payload.response.post.GetPostResponse;
+import radiantMoramMoram.MoramMoram.payload.response.post.PostResponse;
 import radiantMoramMoram.MoramMoram.payload.response.post.PostsResponse;
 import radiantMoramMoram.MoramMoram.service.post.PostService;
 
@@ -38,8 +37,8 @@ public class PostController {
     };
 
     @GetMapping("/{postId}")
-    public GetPostResponse getPost(@PathVariable Integer postId,
-                                   @RequestHeader("Authorization") String token) {
+    public PostResponse getPost(@PathVariable Integer postId,
+                                @RequestHeader("Authorization") String token) {
 
         return postService.getPost(postId, token);
 
@@ -69,7 +68,7 @@ public class PostController {
     };
 
     @GetMapping("/random/{click}")
-    public GetPostResponse randomPost(@PathVariable("click") int click){
+    public PostResponse randomPost(@PathVariable("click") int click){
         return postService.randomPost(click);
     }
 
