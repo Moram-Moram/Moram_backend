@@ -29,7 +29,7 @@ public class ReportServiceImpl implements ReportService {
                         .title(post.getTitle())
                         .writer(post.getUser().getNickname())
                         .date(post.getDate())
-                        .image(getImage(post.getId()))
+                        .image(getImage(post))
                         .build())
                 .collect(Collectors.toList());
 
@@ -47,12 +47,12 @@ public class ReportServiceImpl implements ReportService {
                 .writer(post.getUser().getNickname())
                 .content(post.getContent())
                 .date(post.getDate())
-                .image(getImage(postId))
+                .image(getImage(post))
                 .build();
     }
 
-    private List<String> getImage(Integer postId) {
-        return imageRepository.findByPostOrderById(postId)
+    private List<String> getImage(Post post) {
+        return imageRepository.findByPostOrderById(post)
                 .stream().map(Image::getFileName).collect(Collectors.toList());
     }
 
