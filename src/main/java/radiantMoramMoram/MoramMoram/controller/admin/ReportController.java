@@ -20,7 +20,7 @@ public class ReportController {
         return reportService.getReportList();
     }
 
-    @GetMapping("/postId")
+    @GetMapping("/{postId}")
     public ReportPostResponse getReportPost(@PathVariable int postId) {
         return reportService.getReportPost(postId);
     }
