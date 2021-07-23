@@ -6,7 +6,7 @@ import radiantMoramMoram.MoramMoram.entity.post.Post;
 import radiantMoramMoram.MoramMoram.error.BasicException;
 import radiantMoramMoram.MoramMoram.error.ErrorCode;
 import radiantMoramMoram.MoramMoram.payload.request.post.WritePostRequest;
-import radiantMoramMoram.MoramMoram.payload.response.post.GetPostResponse;
+import radiantMoramMoram.MoramMoram.payload.response.post.PostResponse;
 import radiantMoramMoram.MoramMoram.payload.response.post.PostListResponse;
 import radiantMoramMoram.MoramMoram.payload.response.post.PostsResponse;
 import radiantMoramMoram.MoramMoram.repository.post.PostRepository;
@@ -92,7 +92,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public GetPostResponse getPost(Integer postId, String token) {
+    public PostResponse getPost(Integer postId, String token) {
 
         Post post = postRepository.findById(postId)
                 .orElseThrow(PostNotFoundException::new);
@@ -106,10 +106,12 @@ public class PostServiceImpl implements PostService {
                 .stream().map(Image::getPath)
                 .collect(Collectors.toList());
 
-        return GetPostResponse.builder()
+        return PostResponse.builder()
+                .postId(post.getId())
                 .title(post.getTitle())
                 .content(post.getContent())
-                .writer(user.getNickname())
+                .writer(post.getUser().getNickname())
+                .date(post.getDate())
                 .fileName(fileNames)
                 .likeNum(likePostNum)
                 .build();
@@ -168,7 +170,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public GetPostResponse randomPost(int num) {
+    public PostResponse randomPost(int num) {
 
         Long number = postRepository.count();
         Random random = new Random();
@@ -184,7 +186,7 @@ public class PostServiceImpl implements PostService {
 
         int likeNum = likePostRepository.postLikeNum(post.getId());
 
-        return GetPostResponse.builder()
+        return PostResponse.builder()
                 .postId(post.getId())
                 .title(post.getTitle())
                 .content(post.getContent())

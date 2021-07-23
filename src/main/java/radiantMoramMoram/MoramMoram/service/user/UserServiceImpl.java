@@ -83,12 +83,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUser(UpdateUserRequest updateUserRequest, String token) {
+
         User user = userRepository.findById(jwtUtil.getUserIdFromJwtToken(token))
                 .orElseThrow(UserNotFoundException::new);
 
         String password = updateUserRequest.getPassword();
 
-        boolean checkBox = updateUserRequest.isCheckBox();
+        boolean checkBox = updateUserRequest.isWhiteCheck();
 
         userRepository.save(user.update(password, checkBox));
     }

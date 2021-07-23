@@ -3,7 +3,7 @@ import radiantMoramMoram.MoramMoram.payload.request.post.WritePostRequest;
 
 import radiantMoramMoram.MoramMoram.payload.request.post.LikePostRequest;
 import radiantMoramMoram.MoramMoram.payload.response.mypage.MyPagePostResponse;
-import radiantMoramMoram.MoramMoram.payload.response.post.GetPostResponse;
+import radiantMoramMoram.MoramMoram.payload.response.post.PostResponse;
 import radiantMoramMoram.MoramMoram.payload.response.post.PostsResponse;
 
 import java.util.List;
@@ -12,7 +12,7 @@ public interface PostService {
 
     void writePost(WritePostRequest writePostRequest, String token);
 
-    GetPostResponse getPost(Integer postId, String token);
+    PostResponse getPost(Integer postId, String token);
 
     void deletePost(Integer postId, String token);
 
@@ -20,7 +20,7 @@ public interface PostService {
 
     void reportPost(Integer postId, String token);
 
-    GetPostResponse randomPost(int num);
+    PostResponse randomPost(int num);
 
     PostsResponse getPostList(String category);
 
