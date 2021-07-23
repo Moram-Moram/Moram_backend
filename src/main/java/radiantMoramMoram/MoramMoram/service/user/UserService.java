@@ -19,6 +19,8 @@ public interface UserService {
 
     MyPageResponse getMyPage(String userId);
 
-    void duplicateCheck(SignUpRequest signUpRequest);
+    void duplicateIdCheck(String userId);
+
+    void duplicateNickNameCheck(String userNickName);
 
 }
