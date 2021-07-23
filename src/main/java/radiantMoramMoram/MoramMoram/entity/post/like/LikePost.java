@@ -18,10 +18,12 @@ import javax.persistence.*;
 public class LikePost {
 
     @Id
+    @JoinColumn(name = "post_id")
     @OneToOne
     private Post post;
 
     @Id
+    @JoinColumn(name = "user_id")
     @ManyToOne
     private User user;
 }

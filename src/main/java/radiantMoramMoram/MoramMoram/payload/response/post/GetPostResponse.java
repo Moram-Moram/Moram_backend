@@ -26,7 +26,7 @@ public class GetPostResponse {
 
     private LocalDate date;
 
-    private List<String> image;
+    private List<String> fileName;
 
     private Integer likeNum;
 

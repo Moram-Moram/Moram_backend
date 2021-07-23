@@ -14,6 +14,8 @@ import radiantMoramMoram.MoramMoram.payload.response.token.AccessTokenResponse;
 import radiantMoramMoram.MoramMoram.payload.response.token.TokenResponse;
 import radiantMoramMoram.MoramMoram.service.user.UserServiceImpl;
 
+import javax.validation.Valid;
+
 
 @RequiredArgsConstructor
 @RestController
@@ -43,9 +45,19 @@ public class UserController {
     }
 
     @PutMapping("/user/{userId}/update")
-    public void updateUser(@RequestBody UpdateUserRequest updateUserRequest,
-                           @AuthenticationPrincipal User user) {
-        userService.updateUser(updateUserRequest, user);
+    public void updateUser(@RequestBody @Valid UpdateUserRequest updateUserRequest,
+                           @RequestHeader("Authorization") String token) {
+        userService.updateUser(updateUserRequest, token);
+    }
+
+    @GetMapping("/user/{userId}/exists")
+    public void duplicateIdCheck(@PathVariable String userId){
+        userService.duplicateIdCheck(userId);
+    }
+
+    @GetMapping("/userNickName/{userNickName}/exists")
+    public void duplicateNickNameCheck(@PathVariable String userNickName){
+        userService.duplicateNickNameCheck(userNickName);
     }
 
 }

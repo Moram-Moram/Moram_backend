@@ -19,6 +19,9 @@ import radiantMoramMoram.MoramMoram.payload.request.user.TokenInfoRequest;
 import radiantMoramMoram.MoramMoram.payload.response.mypage.MyPageResponse;
 import radiantMoramMoram.MoramMoram.payload.response.token.AccessTokenResponse;
 import radiantMoramMoram.MoramMoram.repository.UserRepository;
+import radiantMoramMoram.MoramMoram.repository.post.ImageRepository;
+import radiantMoramMoram.MoramMoram.repository.post.LikePostRepository;
+import radiantMoramMoram.MoramMoram.repository.post.PostRepository;
 import radiantMoramMoram.MoramMoram.security.token.JwtUtil;
 import radiantMoramMoram.MoramMoram.payload.response.token.TokenResponse;
 
@@ -31,6 +34,9 @@ import static radiantMoramMoram.MoramMoram.entity.user.User.pwEncrypt;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
+    private final PostRepository postRepository;
+    private final ImageRepository imageRepository;
+    private final LikePostRepository likePostRepository;
 
     @Override
     public void join(SignUpRequest userReq){
@@ -59,20 +65,6 @@ public class UserServiceImpl implements UserService {
         return jwtUtil.createToken(tokenInfoReq);
     }
 
-    @Override
-    public void duplicateCheck(SignUpRequest signUpRequest) {
-        userRepository.findById(signUpRequest.getId())
-                .ifPresent(u -> {
-                    throw new UserAlreadyExistsException();
-                });
-
-        userRepository.findByNickname(signUpRequest.getNickname())
-                .ifPresent(user -> {
-                    throw new UserAlreadyExistsException();
-                });
-    }
-
-
     public AccessTokenResponse tokenRefresh(String token){
         if(!jwtUtil.checkTypeFromToken(token)){
             throw new TokenException(TokenErrorCode.INVALID_TOKEN);
@@ -90,7 +82,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUser(UpdateUserRequest updateUserRequest, User user) {
+    public void updateUser(UpdateUserRequest updateUserRequest, String token) {
+        User user = userRepository.findById(jwtUtil.getUserIdFromJwtToken(token))
+                .orElseThrow(UserNotFoundException::new);
         String password = updateUserRequest.getPassword();
 
         boolean checkBox = updateUserRequest.isCheckBox();
@@ -99,9 +93,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public MyPageResponse getMyPage(String userId) {
+    public MyPageResponse getMyPage(String userId, String token) {
 
-        User user = userRepository.findById(userId)
+        User user = userRepository.findById(jwtUtil.getUserIdFromJwtToken(token))
                 .orElseThrow(UserNotFoundException::new);
 
         return MyPageResponse.builder()
@@ -110,4 +104,21 @@ public class UserServiceImpl implements UserService {
                 .role(user.getRole().toString())
                 .build();
     }
+
+    @Override
+    public void duplicateIdCheck(String userId) {
+        userRepository.findById(userId)
+                .ifPresent(u -> {
+                    throw new UserAlreadyExistsException();
+                });
+    }
+
+    @Override
+    public void duplicateNickNameCheck(String userNickName) {
+        userRepository.findByNickname(userNickName)
+                .ifPresent(user -> {
+                    throw new UserAlreadyExistsException();
+                });
+    }
+
 }
