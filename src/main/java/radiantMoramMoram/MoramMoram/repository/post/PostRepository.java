@@ -5,9 +5,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Repository;
 import radiantMoramMoram.MoramMoram.entity.post.Post;
 import radiantMoramMoram.MoramMoram.entity.user.User;
 import radiantMoramMoram.MoramMoram.payload.response.mypage.MyPagePostResponse;
+import radiantMoramMoram.MoramMoram.payload.response.admin.ReportPostResponse;
 
 import java.util.List;
 
@@ -18,5 +20,7 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
     Post findRandomPost();
 
     List<Post> findByUser(User user);
+
+    List<Post> findByReport(boolean report);
 
 }
