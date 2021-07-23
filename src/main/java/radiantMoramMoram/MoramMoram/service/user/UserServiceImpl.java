@@ -2,25 +2,42 @@ package radiantMoramMoram.MoramMoram.service.user;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import radiantMoramMoram.MoramMoram.entity.post.Post;
+import radiantMoramMoram.MoramMoram.entity.post.image.Image;
 import radiantMoramMoram.MoramMoram.entity.user.User;
 import radiantMoramMoram.MoramMoram.entity.user.UserBuilder;
 import radiantMoramMoram.MoramMoram.error.BasicException;
 import radiantMoramMoram.MoramMoram.error.ErrorCode;
 import radiantMoramMoram.MoramMoram.error.TokenErrorCode;
 import radiantMoramMoram.MoramMoram.error.TokenException;
+<<<<<<< HEAD
 import radiantMoramMoram.MoramMoram.exception.UserAlreadyExistsException;
+=======
+import radiantMoramMoram.MoramMoram.exception.PostNotFoundException;
+>>>>>>> user
 import radiantMoramMoram.MoramMoram.exception.UserNotFoundException;
 import radiantMoramMoram.MoramMoram.payload.request.mypage.UpdateUserRequest;
 import radiantMoramMoram.MoramMoram.payload.request.user.LoginRequest;
 import radiantMoramMoram.MoramMoram.payload.request.user.SignUpRequest;
 import radiantMoramMoram.MoramMoram.payload.request.user.TokenInfoRequest;
+import radiantMoramMoram.MoramMoram.payload.response.mypage.MyPagePostResponse;
 import radiantMoramMoram.MoramMoram.payload.response.mypage.MyPageResponse;
 import radiantMoramMoram.MoramMoram.payload.response.token.AccessTokenResponse;
 import radiantMoramMoram.MoramMoram.repository.UserRepository;
+import radiantMoramMoram.MoramMoram.repository.post.ImageRepository;
+import radiantMoramMoram.MoramMoram.repository.post.LikePostRepository;
+import radiantMoramMoram.MoramMoram.repository.post.PostRepository;
+import radiantMoramMoram.MoramMoram.security.auth.Authority;
 import radiantMoramMoram.MoramMoram.security.token.JwtUtil;
 import radiantMoramMoram.MoramMoram.payload.response.token.TokenResponse;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static radiantMoramMoram.MoramMoram.entity.user.User.pwEncrypt;
 
@@ -31,6 +48,9 @@ import static radiantMoramMoram.MoramMoram.entity.user.User.pwEncrypt;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
+    private final PostRepository postRepository;
+    private final ImageRepository imageRepository;
+    private final LikePostRepository likePostRepository;
 
     @Override
     public void join(SignUpRequest userReq){

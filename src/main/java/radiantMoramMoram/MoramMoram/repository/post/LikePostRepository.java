@@ -8,14 +8,23 @@ import radiantMoramMoram.MoramMoram.entity.post.like.LikePost;
 import radiantMoramMoram.MoramMoram.entity.post.like.LikePostKey;
 import radiantMoramMoram.MoramMoram.entity.user.User;
 
+<<<<<<< HEAD
 @Repository
+=======
+import java.util.List;
+
+>>>>>>> user
 public interface LikePostRepository extends JpaRepository<LikePost, LikePostKey> {
 
     boolean existsByPostAndUser(Post post, User user);
 
     void deleteByPostAndUser(Post post, User user);
 
+<<<<<<< HEAD
     @Query(value = "select count(*) from moram_moram.tbl_like where post_id = :postId", nativeQuery = true)
     int postLikeNum(int postId);
+=======
+    List<LikePost> findByUser(User user);
+>>>>>>> user
 
 }
