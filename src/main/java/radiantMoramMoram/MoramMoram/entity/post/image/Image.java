@@ -24,8 +24,8 @@ public class Image {
     @Id
     private int id;
 
-    @JoinColumn(name = "post_id")
     @ManyToOne
+    @JoinColumn(name = "post_id")
     private Post post;
 
     @Column(name = "path")
