@@ -7,9 +7,11 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import radiantMoramMoram.MoramMoram.entity.post.Post;
 
+import java.util.List;
+
 @Repository
 public interface ReportRepository extends CrudRepository<Post, Integer> {
 
-    Page<Post> findAllBy(Pageable pageable);
+    List<Post> findAllBy();
 
 }
