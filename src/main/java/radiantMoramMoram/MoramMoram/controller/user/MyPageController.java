@@ -13,8 +13,7 @@ public class MyPageController {
 
     private final UserService userService;
 
-    //@RequestMapping(value = "{userId}",  method=RequestMethod.GET)
-    @GetMapping("{userId}")
+    @GetMapping("/{userId}")
     public MyPageResponse getMyPage(@PathVariable String userId) {
         return userService.getMyPage(userId);
     }
