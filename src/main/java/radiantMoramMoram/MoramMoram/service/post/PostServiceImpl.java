@@ -1,8 +1,10 @@
 package radiantMoramMoram.MoramMoram.service.post;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import radiantMoramMoram.MoramMoram.entity.post.Post;
+import radiantMoramMoram.MoramMoram.entity.post.like.LikePostKey;
 import radiantMoramMoram.MoramMoram.error.BasicException;
 import radiantMoramMoram.MoramMoram.error.ErrorCode;
 import radiantMoramMoram.MoramMoram.exception.*;
@@ -48,16 +50,6 @@ public class PostServiceImpl implements PostService {
 
     @Value("${post.image.path}")
     private String imagePath;
-
-    public boolean checkUser(String token, int postId){
-        Optional<Post> post = postRepository.findById(postId);
-        post.orElseThrow(PostNotFoundException::new);
-        if (token!=null){
-            return post.get().getUser().getId().equals(jwtUtil.getUserIdFromJwtToken(token));
-        } else{
-            return false;
-        }
-    }
 
     @SneakyThrows
     @Override
@@ -223,7 +215,7 @@ public class PostServiceImpl implements PostService {
                 .likeNum(likeNum)
                 .fileName(fileNames)
                 .userCheck(checkUser(token, post.getId()))
-                .likeCheck(false)
+                .likeCheck(checkLike(token, post.getId()))
                 .reportCheck(false)
                 .build();
     }
@@ -309,5 +301,26 @@ public class PostServiceImpl implements PostService {
         return imageRepository.findByPostOrderById(post)
                     .stream().map(Image::getPath)
                     .collect(Collectors.toList());
+    }
+
+    private boolean checkUser(String token, int postId){
+        if(token == null) {
+            return false;
+        }
+        Optional<Post> post = postRepository.findById(postId);
+        post.orElseThrow(PostNotFoundException::new);
+        return post.get().getUser().getId().equals(jwtUtil.getUserIdFromJwtToken(token));
+    }
+
+    private boolean checkLike(String token, int postId){
+        if(token == null){
+            return false;
+        }
+        LikePostKey likeKey = LikePostKey.builder()
+                .post(postId)
+                .user(jwtUtil.getUserIdFromJwtToken(token))
+                .build();
+        Optional<LikePost> like = likePostRepository.findById(likeKey);
+        return like.isPresent();
     }
 }
