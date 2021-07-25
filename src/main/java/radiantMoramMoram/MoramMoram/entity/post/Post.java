@@ -1,6 +1,7 @@
 package radiantMoramMoram.MoramMoram.entity.post;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 import radiantMoramMoram.MoramMoram.entity.user.User;
 
 import javax.persistence.*;
@@ -21,6 +22,7 @@ public class Post {
 
     private String content;
 
+    @CreationTimestamp
     @Column(name = "create_at")
     private LocalDate date;
 
