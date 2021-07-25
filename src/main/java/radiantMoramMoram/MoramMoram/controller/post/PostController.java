@@ -9,6 +9,8 @@ import radiantMoramMoram.MoramMoram.payload.response.post.PostResponse;
 import radiantMoramMoram.MoramMoram.payload.response.post.PostsResponse;
 import radiantMoramMoram.MoramMoram.service.post.PostService;
 
+import java.time.LocalDate;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/post")
@@ -21,6 +23,7 @@ public class PostController {
                           @RequestParam("title") String title,
                           @RequestParam("content") String content,
                           @RequestParam("user") String user,
+                          @RequestParam("date") LocalDate date,
                           @RequestParam("fileName") MultipartFile[] fileName,
                           @RequestParam("category") String[] category) {
 
@@ -29,6 +32,7 @@ public class PostController {
                         .title(title)
                         .content(content)
                         .user(user)
+                        .date(date)
                         .fileName(fileName)
                         .category(category)
                         .build()

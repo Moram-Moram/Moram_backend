@@ -1,7 +1,6 @@
 package radiantMoramMoram.MoramMoram.service.post;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import radiantMoramMoram.MoramMoram.entity.post.Post;
 import radiantMoramMoram.MoramMoram.entity.post.like.LikePostKey;
@@ -77,14 +76,14 @@ public class PostServiceImpl implements PostService {
 
         for (MultipartFile image : writePostRequest.getFileName()) {
 
-            String fileName = UUID.randomUUID().toString();
+            String path = UUID.randomUUID().toString();
 
-            File file = new File(imagePath, fileName);
+            File file = new File(imagePath, path);
 
             imageRepository.save(
                     Image.builder()
                             .post(post)
-                            .path(fileName)
+                            .path(path)
                             .build()
             );
 
