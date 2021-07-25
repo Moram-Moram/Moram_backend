@@ -10,7 +10,6 @@ import radiantMoramMoram.MoramMoram.payload.request.post.WritePostRequest;
 import radiantMoramMoram.MoramMoram.payload.response.post.PostResponse;
 import radiantMoramMoram.MoramMoram.payload.response.post.PostListResponse;
 import radiantMoramMoram.MoramMoram.payload.response.post.PostsResponse;
-import radiantMoramMoram.MoramMoram.repository.CommentRepository;
 import radiantMoramMoram.MoramMoram.repository.post.PostRepository;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,12 +43,11 @@ public class PostServiceImpl implements PostService {
     private final CategoryRepository categoryRepository;
     private final ImageRepository imageRepository;
     private final LikePostRepository likePostRepository;
-    private final CommentRepository commentRepository;
 
     @Value("${post.image.path}")
     private String imagePath;
 
-    public boolean checkUser(String token, int postId){
+    public boolean checkUser(String token, Integer postId){
         Optional<Post> post = postRepository.findById(postId);
         post.orElseThrow(PostNotFoundException::new);
         if (token!=null){
@@ -70,6 +68,7 @@ public class PostServiceImpl implements PostService {
                 Post.builder()
                         .title(writePostRequest.getTitle())
                         .content(writePostRequest.getContent())
+                        .date(writePostRequest.getDate())
                         .user(user)
                         .build()
         );
@@ -111,6 +110,8 @@ public class PostServiceImpl implements PostService {
         User user = userRepository.findById(jwtUtil.getUserIdFromJwtToken(token))
                 .orElseThrow(UserNotFoundException::new);
 
+        boolean isLikePosted = likePostRepository.existsByPostAndUser(post, user);
+
         int likePostNum = likePostRepository.postLikeNum(postId);
 
         List<String> fileNames = imageRepository.findByPostOrderById(post)
@@ -125,34 +126,21 @@ public class PostServiceImpl implements PostService {
                 .date(post.getDate())
                 .fileName(fileNames)
                 .likeNum(likePostNum)
+                .likeCheck(isLikePosted)
+                .reportCheck(post.isReport())
+                .userCheck(checkUser(token, postId))
                 .build();
     }
 
     @Override
     public void deletePost(Integer postId, String token) {
 
-        User user = userRepository.findById(jwtUtil.getUserIdFromJwtToken(token))
-                .orElseThrow(UserNotFoundException::new);
+        boolean user = checkUser(token, postId);
 
         postRepository.findById(postId)
                 .orElseThrow(PostNotFoundException::new);
 
-        imageRepository.findByPostId(postId)
-                .orElseThrow(ImageNotFoundException::new);
-
-        categoryRepository.findByPostId(postId)
-                .orElseThrow(CategoryNotFoundException::new);
-
-        commentRepository.findByPostId(postId)
-                .orElseThrow(CommentNotFoundException::new);
-
         postRepository.deleteById(postId);
-
-        imageRepository.deleteByPostId(postId);
-
-        categoryRepository.deleteByPostId(postId);
-
-        commentRepository.deleteByPostId(postId);
 
     }
 
