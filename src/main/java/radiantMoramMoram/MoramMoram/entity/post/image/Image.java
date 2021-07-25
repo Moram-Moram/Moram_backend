@@ -21,7 +21,7 @@ public class Image {
 
     @Id
     @JoinColumn(name = "post_id")
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     private Post post;
 
     private String path;

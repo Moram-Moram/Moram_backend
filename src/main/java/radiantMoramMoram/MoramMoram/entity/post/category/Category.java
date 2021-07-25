@@ -17,7 +17,7 @@ import javax.persistence.*;
 public class Category {
 
     @Id
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "post_id")
     private Post post;
 
