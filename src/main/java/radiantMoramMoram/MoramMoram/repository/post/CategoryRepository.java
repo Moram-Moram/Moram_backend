@@ -12,4 +12,6 @@ public interface CategoryRepository extends JpaRepository<Category, CategoryKey>
     @Query(value = "select c.post_id from moram_moram.tbl_category c where c.name = :category", nativeQuery = true)
     List<Integer> categoryPostListReturn(String category);
 
+    void deleteByPostId(int postId);
+
 }
