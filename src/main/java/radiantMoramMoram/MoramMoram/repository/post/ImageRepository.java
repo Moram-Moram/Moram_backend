@@ -10,5 +10,6 @@ import java.util.List;
 public interface ImageRepository extends JpaRepository<Image, ImageKey> {
 
     List<Image> findByPostOrderById(Post post);
+    void deleteByPostId(int postId);
 
 }
