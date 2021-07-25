@@ -29,6 +29,7 @@ import radiantMoramMoram.MoramMoram.repository.post.LikePostRepository;
 import radiantMoramMoram.MoramMoram.security.auth.Authority;
 import radiantMoramMoram.MoramMoram.security.token.JwtUtil;
 
+import javax.transaction.Transactional;
 import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -123,6 +124,7 @@ public class PostServiceImpl implements PostService {
                 .build();
     }
 
+    @Transactional
     @Override
     public void deletePost(Integer postId, String token) {
 
