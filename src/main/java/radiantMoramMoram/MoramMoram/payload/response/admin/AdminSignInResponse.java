@@ -3,6 +3,7 @@ package radiantMoramMoram.MoramMoram.payload.response.admin;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import radiantMoramMoram.MoramMoram.security.auth.Authority;
 
 @Getter
 @Builder
@@ -15,6 +16,6 @@ public class AdminSignInResponse {
 
     private final Long accessTokenExp;
 
-    private final String role;
+    private final Authority role;
 
 }

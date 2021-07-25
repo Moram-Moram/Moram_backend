@@ -14,9 +14,8 @@ public class AuthorityAttributeConverter implements AttributeConverter<Authority
 
     @Override
     public Authority convertToEntityAttribute(Integer num) {
-
         return Stream.of(Authority.values())
-                .filter(c -> c.num == num+1)
+                .filter(c -> c.num == num)
                 .findFirst()
                 .orElseThrow(IllegalArgumentException::new);
     }

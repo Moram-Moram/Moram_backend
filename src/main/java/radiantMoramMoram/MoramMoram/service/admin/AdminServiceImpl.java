@@ -32,7 +32,7 @@ public class AdminServiceImpl implements AdminService {
                 .accessToken(jwtUtil.generateToken(tokenInfoReq))
                 .tokenType("access")
                 .accessTokenExp(accessExp)
-                .role(Authority.ADMIN.toString())
+                .role(Authority.ADMIN)
                 .build();
     }
 }
