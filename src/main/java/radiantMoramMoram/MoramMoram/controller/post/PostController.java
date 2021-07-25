@@ -68,8 +68,8 @@ public class PostController {
     };
 
     @GetMapping("/random/{click}")
-    public PostResponse randomPost(@PathVariable("click") int click){
-        return postService.randomPost(click);
+    public PostResponse randomPost(@PathVariable("click") int click, @RequestHeader(value = "Authorization", required = false) String token){
+        return postService.randomPost(click, token);
     }
 
     @GetMapping("/list/{category}")

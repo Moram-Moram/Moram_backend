@@ -20,7 +20,7 @@ public interface PostService {
 
     void reportPost(Integer postId, String token);
 
-    PostResponse randomPost(int num);
+    PostResponse randomPost(int num, String token);
 
     PostsResponse getPostList(String category);
 
