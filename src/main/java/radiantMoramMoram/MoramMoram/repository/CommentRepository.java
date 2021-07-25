@@ -8,9 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CommentRepository extends CrudRepository<Comment, Integer> {
+
     List<Comment> findByPost_Id(int postId);
 
-    Optional<Post> findByPostId(Integer postId);
-
-    void deleteByPostId(Integer postId);
 }
