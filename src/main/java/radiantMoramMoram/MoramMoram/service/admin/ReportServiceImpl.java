@@ -72,19 +72,14 @@ public class ReportServiceImpl implements ReportService {
         if(post.isEmpty()){
             throw new PostNotFoundException();
         }
-
+        if(!commentRepository.findByPost_Id(postId).isEmpty()){
+            commentRepository.deleteByPostId(postId);
+        }
         if(likeRepository.findByPost_Id(postId)!=null){
             likeRepository.deleteAllByPost_Id(postId);
         }
-
-        imageRepository.deleteByPostId(postId);
         categoryRepository.deleteByPostId(postId);
-        if(commentRepository.findByPost_Id(postId).isEmpty()){
-            postRepository.deleteById(postId);
-            return;
-        }
-        commentRepository.deleteByPostId(postId);
-        postRepository.deleteById(postId);
+        imageRepository.deleteByPostId(postId);
     }
 
     private boolean findByPost(int postId){
