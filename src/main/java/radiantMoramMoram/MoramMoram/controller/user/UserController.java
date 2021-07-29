@@ -44,7 +44,7 @@ public class UserController {
         userService.deleteUser(userId);
     }
 
-    @PutMapping("/user/{userId}/update")
+    @PutMapping("/user/{userId}")
     public void updateUser(@RequestBody @Valid UpdateUserRequest updateUserRequest,
                            @RequestHeader("Authorization") String token) {
         userService.updateUser(updateUserRequest, token);

@@ -8,6 +8,8 @@ import org.springframework.web.multipart.MultipartFile;
 import radiantMoramMoram.MoramMoram.entity.post.Post;
 import radiantMoramMoram.MoramMoram.entity.user.User;
 
+import java.time.LocalDate;
+
 @Getter
 @Builder
 @NoArgsConstructor
@@ -19,6 +21,8 @@ public class WritePostRequest {
     private String content;
 
     private String  user;
+
+    private LocalDate date;
 
     private MultipartFile[] fileName;
 

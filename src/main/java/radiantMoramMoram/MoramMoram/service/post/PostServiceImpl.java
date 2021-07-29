@@ -3,10 +3,12 @@ package radiantMoramMoram.MoramMoram.service.post;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import radiantMoramMoram.MoramMoram.entity.post.Post;
+import radiantMoramMoram.MoramMoram.entity.post.like.LikePostKey;
 import radiantMoramMoram.MoramMoram.error.BasicException;
 import radiantMoramMoram.MoramMoram.error.ErrorCode;
+import radiantMoramMoram.MoramMoram.exception.*;
 import radiantMoramMoram.MoramMoram.payload.request.post.WritePostRequest;
-import radiantMoramMoram.MoramMoram.payload.response.post.GetPostResponse;
+import radiantMoramMoram.MoramMoram.payload.response.post.PostResponse;
 import radiantMoramMoram.MoramMoram.payload.response.post.PostListResponse;
 import radiantMoramMoram.MoramMoram.payload.response.post.PostsResponse;
 import radiantMoramMoram.MoramMoram.repository.post.PostRepository;
@@ -18,8 +20,6 @@ import radiantMoramMoram.MoramMoram.entity.post.category.CategoryEnum;
 import radiantMoramMoram.MoramMoram.entity.post.image.Image;
 import radiantMoramMoram.MoramMoram.entity.post.like.LikePost;
 import radiantMoramMoram.MoramMoram.entity.user.User;
-import radiantMoramMoram.MoramMoram.exception.PostNotFoundException;
-import radiantMoramMoram.MoramMoram.exception.UserNotFoundException;
 import radiantMoramMoram.MoramMoram.payload.request.post.LikePostRequest;
 import radiantMoramMoram.MoramMoram.payload.response.mypage.MyPagePostResponse;
 import radiantMoramMoram.MoramMoram.repository.UserRepository;
@@ -29,6 +29,7 @@ import radiantMoramMoram.MoramMoram.repository.post.LikePostRepository;
 import radiantMoramMoram.MoramMoram.security.auth.Authority;
 import radiantMoramMoram.MoramMoram.security.token.JwtUtil;
 
+import javax.transaction.Transactional;
 import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -59,23 +60,25 @@ public class PostServiceImpl implements PostService {
                 Post.builder()
                         .title(writePostRequest.getTitle())
                         .content(writePostRequest.getContent())
+                        .date(writePostRequest.getDate())
                         .user(user)
                         .build()
         );
 
         for (MultipartFile image : writePostRequest.getFileName()) {
 
-            String fileName = UUID.randomUUID().toString();
+            String path = UUID.randomUUID().toString();
 
-            File file = new File(imagePath, fileName);
+            File file = new File(imagePath, path);
 
             imageRepository.save(
                     Image.builder()
                             .post(post)
-                            .path(fileName)
+                            .path(path)
                             .build()
             );
 
+            file.createNewFile();
             image.transferTo(file);
 
         }
@@ -92,7 +95,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public GetPostResponse getPost(Integer postId, String token) {
+    public PostResponse getPost(Integer postId, String token) {
 
         Post post = postRepository.findById(postId)
                 .orElseThrow(PostNotFoundException::new);
@@ -100,31 +103,39 @@ public class PostServiceImpl implements PostService {
         User user = userRepository.findById(jwtUtil.getUserIdFromJwtToken(token))
                 .orElseThrow(UserNotFoundException::new);
 
+        boolean isLikePosted = likePostRepository.existsByPostAndUser(post, user);
+
         int likePostNum = likePostRepository.postLikeNum(postId);
 
         List<String> fileNames = imageRepository.findByPostOrderById(post)
                 .stream().map(Image::getPath)
                 .collect(Collectors.toList());
 
-        return GetPostResponse.builder()
+        return PostResponse.builder()
+                .postId(post.getId())
                 .title(post.getTitle())
                 .content(post.getContent())
-                .writer(user.getNickname())
+                .writer(post.getUser().getNickname())
+                .date(post.getDate())
                 .fileName(fileNames)
                 .likeNum(likePostNum)
+                .likeCheck(isLikePosted)
+                .reportCheck(post.isReport())
+                .userCheck(checkUser(token, postId))
                 .build();
     }
 
+    @Transactional
     @Override
     public void deletePost(Integer postId, String token) {
 
-        User user = userRepository.findById(jwtUtil.getUserIdFromJwtToken(token))
-                .orElseThrow(UserNotFoundException::new);
+        boolean user = checkUser(token, postId);
 
         postRepository.findById(postId)
                 .orElseThrow(PostNotFoundException::new);
 
         postRepository.deleteById(postId);
+
     }
 
     @Override
@@ -168,7 +179,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public GetPostResponse randomPost(int num) {
+    public PostResponse randomPost(int num, String token) {
 
         Long number = postRepository.count();
         Random random = new Random();
@@ -184,7 +195,7 @@ public class PostServiceImpl implements PostService {
 
         int likeNum = likePostRepository.postLikeNum(post.getId());
 
-        return GetPostResponse.builder()
+        return PostResponse.builder()
                 .postId(post.getId())
                 .title(post.getTitle())
                 .content(post.getContent())
@@ -193,6 +204,9 @@ public class PostServiceImpl implements PostService {
                 .date(post.getDate())
                 .likeNum(likeNum)
                 .fileName(fileNames)
+                .userCheck(checkUser(token, post.getId()))
+                .likeCheck(checkLike(token, post.getId()))
+                .reportCheck(post.isReport())
                 .build();
     }
 
@@ -213,6 +227,17 @@ public class PostServiceImpl implements PostService {
 
         for (Post p : posts) {
             List<String> fileNames = getFileFromPost(p);
+
+            postList.add(
+                    PostListResponse.builder()
+                    .content(p.getContent())
+                    .date(p.getDate())
+                    .image(fileNames.get(0))
+                    .postId(p.getId())
+                    .title(p.getTitle())
+                    .writer(p.getUser().getNickname())
+                    .build()
+            );
         }
 
         return new PostsResponse(category, postList);
@@ -266,5 +291,26 @@ public class PostServiceImpl implements PostService {
         return imageRepository.findByPostOrderById(post)
                     .stream().map(Image::getPath)
                     .collect(Collectors.toList());
+    }
+
+    private boolean checkUser(String token, int postId){
+        if(token == null) {
+            return false;
+        }
+        Optional<Post> post = postRepository.findById(postId);
+        post.orElseThrow(PostNotFoundException::new);
+        return post.get().getUser().getId().equals(jwtUtil.getUserIdFromJwtToken(token));
+    }
+
+    private boolean checkLike(String token, int postId){
+        if(token == null){
+            return false;
+        }
+        LikePostKey likeKey = LikePostKey.builder()
+                .post(postId)
+                .user(jwtUtil.getUserIdFromJwtToken(token))
+                .build();
+        Optional<LikePost> like = likePostRepository.findById(likeKey);
+        return like.isPresent();
     }
 }

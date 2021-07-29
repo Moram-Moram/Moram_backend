@@ -8,10 +8,9 @@ server:
       force: true
       force-response: true
       force-request: true
-
 spring:
   datasource:
-    url: jdbc:mysql://moram:morammoram12@moram-moram.cwjdlhpngx8e.us-east-2.rds.amazonaws.com:3306/moram_moram
+    url: ${MYSQL_URL:}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   redis:
@@ -21,7 +20,7 @@ spring:
     show-sql: true
 auth:
   jwt:
-    secret: 45VCO4fzXw4O32IV0qF3hixZLWChc4WiB9li3mw-WPcnfe7c
+    secret: ${JWT_SECRET_KEY:}
     exp:
       access: ${JWT_ACCESS_EXP:3600}
       refresh: ${JWT_REFRESH_EXP:3600}

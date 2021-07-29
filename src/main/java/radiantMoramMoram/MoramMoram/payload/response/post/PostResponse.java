@@ -12,7 +12,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetPostResponse {
+public class PostResponse {
 
     private Integer postId;
 
@@ -29,5 +29,11 @@ public class GetPostResponse {
     private List<String> fileName;
 
     private Integer likeNum;
+
+    private boolean userCheck;
+
+    private boolean likeCheck;
+
+    private boolean reportCheck;
 
 }

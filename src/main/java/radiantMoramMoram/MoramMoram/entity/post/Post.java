@@ -1,9 +1,7 @@
 package radiantMoramMoram.MoramMoram.entity.post;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 import radiantMoramMoram.MoramMoram.entity.user.User;
 
 import javax.persistence.*;
@@ -18,12 +16,13 @@ public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     private String title;
 
     private String content;
 
+    @CreationTimestamp
     @Column(name = "create_at")
     private LocalDate date;
 

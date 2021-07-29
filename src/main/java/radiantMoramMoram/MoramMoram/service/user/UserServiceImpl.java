@@ -34,9 +34,6 @@ import static radiantMoramMoram.MoramMoram.entity.user.User.pwEncrypt;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
-    private final PostRepository postRepository;
-    private final ImageRepository imageRepository;
-    private final LikePostRepository likePostRepository;
 
     @Override
     public void join(SignUpRequest userReq){
@@ -83,11 +80,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUser(UpdateUserRequest updateUserRequest, String token) {
+
         User user = userRepository.findById(jwtUtil.getUserIdFromJwtToken(token))
                 .orElseThrow(UserNotFoundException::new);
+
         String password = updateUserRequest.getPassword();
 
-        boolean checkBox = updateUserRequest.isCheckBox();
+        boolean checkBox = updateUserRequest.isWhiteCheck();
 
         userRepository.save(user.update(password, checkBox));
     }

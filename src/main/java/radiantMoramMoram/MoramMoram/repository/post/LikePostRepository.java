@@ -8,6 +8,7 @@ import radiantMoramMoram.MoramMoram.entity.post.like.LikePost;
 import radiantMoramMoram.MoramMoram.entity.post.like.LikePostKey;
 import radiantMoramMoram.MoramMoram.entity.user.User;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
@@ -19,6 +20,12 @@ public interface LikePostRepository extends JpaRepository<LikePost, LikePostKey>
 
     @Query(value = "select count(*) from moram_moram.tbl_like where post_id = :postId", nativeQuery = true)
     int postLikeNum(int postId);
+
     List<LikePost> findByUser(User user);
+
+    List<LikePost> findByPost_Id(int postId);
+
+    @Transactional
+    void deleteAllByPost_Id(int postId);
 
 }
