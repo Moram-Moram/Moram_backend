@@ -20,8 +20,8 @@ public class Image {
     private int id;
 
     @Id
-    @JoinColumn(name = "post_id")
     @ManyToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "post_id")
     private Post post;
 
     private String path;

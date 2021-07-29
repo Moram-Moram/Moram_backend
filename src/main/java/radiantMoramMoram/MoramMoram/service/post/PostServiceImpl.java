@@ -78,6 +78,7 @@ public class PostServiceImpl implements PostService {
                             .build()
             );
 
+            file.createNewFile();
             image.transferTo(file);
 
         }

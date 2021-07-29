@@ -24,7 +24,7 @@ public class PostController {
                           @RequestParam("content") String content,
                           @RequestParam("user") String user,
                           @RequestParam("date") LocalDate date,
-                          @RequestParam("fileName") MultipartFile[] fileName,
+                          @RequestParam("image") MultipartFile[] image,
                           @RequestParam("category") String[] category) {
 
         postService.writePost(
@@ -33,7 +33,7 @@ public class PostController {
                         .content(content)
                         .user(user)
                         .date(date)
-                        .fileName(fileName)
+                        .fileName(image)
                         .category(category)
                         .build()
                 , token);
