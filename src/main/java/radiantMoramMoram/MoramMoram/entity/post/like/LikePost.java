@@ -19,7 +19,7 @@ public class LikePost {
 
     @Id
     @JoinColumn(name = "post_id")
-    @OneToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne
     private Post post;
 
     @Id
