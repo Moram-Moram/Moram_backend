@@ -18,8 +18,7 @@ import java.util.List;
 public class User {
     @Id
     private String id;
-    @Column(name = "password")
-    private String pw;
+    private String password;
     private String nickname;
     @Column(name = "white_check")
     private boolean whiteCheck;
@@ -33,9 +32,9 @@ public class User {
 
     }
 
-    User(String id, String pw, String nickname, boolean whiteCheck) {
+    User(String id, String password, String nickname, boolean whiteCheck) {
         this.id = id;
-        this.pw = pw;
+        this.password= password;
         this.nickname = nickname;
         this.whiteCheck = whiteCheck;
     }
@@ -57,7 +56,7 @@ public class User {
     }
 
     public User update(String password, boolean whiteCheck) {
-        this.pw = password;
+        this.password = password;
         this.whiteCheck = whiteCheck;
 
         return this;
