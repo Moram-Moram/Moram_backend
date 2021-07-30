@@ -12,7 +12,6 @@ import radiantMoramMoram.MoramMoram.entity.user.User;
 import java.util.Optional;
 
 
-@SpringBootTest(properties = "classpath:/application.yml")
 public class UserTests {
     @Autowired
     UserService userService;
