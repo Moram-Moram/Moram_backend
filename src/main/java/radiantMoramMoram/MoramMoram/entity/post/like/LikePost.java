@@ -26,4 +26,5 @@ public class LikePost {
     @JoinColumn(name = "user_id")
     @ManyToOne
     private User user;
+
 }
