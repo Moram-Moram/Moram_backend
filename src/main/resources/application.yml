@@ -8,16 +8,18 @@ server:
       force: true
       force-response: true
       force-request: true
+
 spring:
   datasource:
     url: ${MYSQL_URL:}
     driver-class-name: com.mysql.cj.jdbc.Driver
-
   redis:
-    host: ${REDIS_HOST:localhost}
+    host: ${REDIS_HOST:}
     port: ${REDIS_PORT:6379}
+    password: ${REDIS_PW:}
   jpa:
     show-sql: true
+
 auth:
   jwt:
     secret: ${JWT_SECRET_KEY:}
