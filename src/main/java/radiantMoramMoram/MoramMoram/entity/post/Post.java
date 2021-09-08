@@ -22,8 +22,8 @@ public class Post {
 
     private String content;
 
-    @CreationTimestamp
     @Column(name = "create_at")
+    @CreationTimestamp
     private LocalDate date;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
