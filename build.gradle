@@ -51,3 +51,7 @@ dependencies {
 test {
 	useJUnitPlatform()
 }
+
+wrapper {
+	gradleVersion = '5.6.1'
+}
