@@ -65,6 +65,11 @@ public class PostServiceImpl implements PostService {
                         .build()
         );
 
+        if(postRepository.countByUser(user)>5){
+            user.setRole(Authority.SHOWER);
+            userRepository.save(user);
+        }
+
         for (MultipartFile image : writePostRequest.getFileName()) {
 
             String path = UUID.randomUUID().toString();

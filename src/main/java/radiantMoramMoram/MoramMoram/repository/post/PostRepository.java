@@ -23,4 +23,6 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
 
     List<Post> findByReport(boolean report);
 
+    int countByUser(User user);
+
 }
